@@ -1,0 +1,147 @@
+version: '3.4'
+
+# services:
+#   csms:
+#     environment:
+#       - ASPNETCORE_ENVIRONMENT=Development
+#       - ASPNETCORE_URLS=https://+:443;http://+:80
+#     ports:
+#       - "80"
+#       - "443"
+#     volumes:
+#       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+#       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+services:
+  # csms:
+  #   container_name: dotnet6
+  #   image: ${DOCKER_REGISTRY-}csms
+  #   build:
+  #     context: .
+  #     dockerfile: CSMS/Dockerfile
+  #   ports:
+  #       - 8081:8080
+  #   environment:
+  #       - ASPNETCORE_ENVIRONMENT=Development
+  csms:
+      container_name: dotnet6
+      build:
+        context: D:\CSMS\CSMS\app\CSMS\CSMS  
+        dockerfile: Dockerfile  
+      ports:
+        - 8081:8080
+      environment:
+        - ASPNETCORE_ENVIRONMENT=Development
+    
+  postgresql:
+    container_name: postgres
+    image: postgres
+    volumes:
+        - ./docker/pg:/var/lib/postgresql
+    environment:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_DB: CustomerMS
+    ports:
+      - '5432:5432'
+
+  nginx:
+    image: nginx:latest 
+    container_name: nginx
+    ports:
+      - "80:80" 
+    volumes:
+      - ./nginx:/etc/nginx/conf.d 
+    restart: always 
+
+  nodejs:
+    image: node:18.17.1 
+    container_name: node.js 
+    working_dir: /usr/src/app 
+    volumes:
+      - D:/CSMS/CSMS/app:/usr/src/app 
+    ports:
+      - "3000:3000" 
+    environment:
+      - NODE_ENV=production 
+    command: ["npm", "start"]  
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      TZ: Asia/Tokyo
+      PGADMIN_DEFAULT_EMAIL: 'naha022677@icloud.com'
+      PGADMIN_DEFAULT_PASSWORD: 'postgres'
+
+# version: '3.4'
+
+# services:
+#   # csms:
+#   #   container_name: dotnet6
+#   #   image: ${DOCKER_REGISTRY-}csms
+#   #   build:
+#   #     context: .
+#   #     dockerfile: CSMS/Dockerfile
+#   #   ports:
+#   #       - 8081:8080
+#   #   environment:
+#   #       - ASPNETCORE_ENVIRONMENT=Development
+#   csms:
+#       container_name: dotnet6
+#       build:
+#         context: D:\CSMS\CSMS\app\CSMS\CSMS  
+#         dockerfile: Dockerfile  
+#       ports:
+#         - 8085:8080
+#       volumes:
+#         - ./nginx:/etc/nginx/conf.d 
+#       environment:
+#         - ASPNETCORE_ENVIRONMENT=Development
+#       networks:
+#         - nginx-network
+#       expose:
+#         - 8085
+#       restart: unless-stopped
+    
+#   db:
+#     container_name: postgres
+#     image: postgres
+#     volumes:
+#         - ./docker/pg:/var/lib/postgresql
+#     environment:
+#         POSTGRES_USER: postgres
+#         POSTGRES_PASSWORD: Naha-snapmatic
+#         POSTGRES_DB: CustomerMS
+#     ports:
+#       - '5433:3306'
+
+#   # nginx:
+#   #   image: nginx:latest 
+#   #   container_name: nginx
+#   #   ports:
+#   #     - "80:80" 
+#   #   volumes:
+#   #     - ./nginx:/etc/nginx/conf.d 
+#   #   restart: unless-stopped 
+#   #   depends_on:
+#   #     - csms
+
+#   nodejs:
+#     image: node:18.17.1 
+#     container_name: node.js 
+#     working_dir: /usr/src/app 
+#     volumes:
+#       - D:/CSMS/CSMS/app:/usr/src/app 
+#     ports:
+#       - "3000:3000" 
+#     environment:
+#       - NODE_ENV=production 
+#     command: ["npm", "start"] 
+  
+# networks:
+#   nginx-network:
+#     driver: bridge
+

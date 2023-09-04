@@ -1,0 +1,19 @@
+name: dockercompose9554884232070536982
+services:
+  csms:
+    build:
+      context: D:\CSMS\CSMS\app\CSMS\CSMS
+      dockerfile: Dockerfile
+    container_name: dotnet6
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      target: 8080
+      published: "8081"
+      protocol: tcp
+networks:
+  default:
+    name: dockercompose9554884232070536982_default
