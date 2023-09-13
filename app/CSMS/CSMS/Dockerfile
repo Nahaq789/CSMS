@@ -13,6 +13,7 @@ RUN dotnet restore "CSMS.csproj"
 COPY . .
 WORKDIR /app
 RUN dotnet build "CSMS.csproj" -c Release -o /app/build
+ENTRYPOINT ["dotnet", "CSMS.dll"]
 
 FROM build AS publish
 RUN dotnet publish "CSMS.csproj" -c Release -o /app/publish /p:UseAppHost=false --no-restore
