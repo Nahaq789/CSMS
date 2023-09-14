@@ -1,3 +1,7 @@
+using CSMS.DomainService;
+using CSMS.DomainService.Interface;
+using CSMS.Models;
+using CSMS.Repository;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using System.Configuration;
@@ -44,7 +48,12 @@ public partial class Program
 public class Startup
 {
     public void ConfigureServices(IServiceCollection services)
-        => services.AddDbContext<ApplicationDbContext>();
+    {
+        services.AddScoped<IDomainService<CustomerModel>, CustomerService>();
+        services.AddScoped<IRepository<CustomerModel>, CustomerRepository>();
+
+        services.AddDbContext<ApplicationDbContext>();
+    }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {

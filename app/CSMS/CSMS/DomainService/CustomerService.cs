@@ -12,13 +12,15 @@ namespace CSMS.DomainService
         {
             this._CustomerRepository = CustomerRepository;
         }
-        public CustomerModel GetByID(int id)
+        public Task<CustomerModel> GetByID(int id)
         {
-            return _CustomerRepository.GetByID(id);
+            var result = _CustomerRepository.GetByID(id);
+            return result;
         }
-        public IEnumerable<CustomerModel> GetAll()
+        public Task<IEnumerable<CustomerModel>> GetAll()
         {
-            return _CustomerRepository.GetAll();
+            var result = _CustomerRepository.GetAll();
+            return result;
         }
         public void Add (CustomerModel customerModel)
         {

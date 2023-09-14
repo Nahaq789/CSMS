@@ -8,23 +8,28 @@ namespace CSMS.Repository
 {
     public class CustomerRepository : IRepository<CustomerModel>
     {
-        private readonly ICustomerRepository _customerRepository;
         private readonly ApplicationDbContext _context;
         private DbSet<CustomerModel> DbSet { get; set; }
-        public CustomerRepository(ICustomerRepository customerRepository, ApplicationDbContext context)
+        public CustomerRepository(ApplicationDbContext context)
         {
-            this._customerRepository = customerRepository;
             this._context = context;
             DbSet = _context.Set<CustomerModel>();
         }
 
-        public CustomerModel GetByID(int id)
+        public async Task<CustomerModel> GetByID(int id)
         {
-            return _customerRepository.GetCustomerByID(id);
+            var result = await DbSet.FindAsync(id);
+            if (result == null)
+            {
+                throw new Exception();
+            }
+            return result;
         }
-        public IEnumerable<CustomerModel> GetAll()
+        public async Task<IEnumerable<CustomerModel>> GetAll()
         {
-            return DbSet.AsNoTracking();
+            var result = await DbSet.ToListAsync();
+            if (result == null) { throw new Exception(); }
+            return result;
         }
         public void Add (CustomerModel customerModel)
         {
