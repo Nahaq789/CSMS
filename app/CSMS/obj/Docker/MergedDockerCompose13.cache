@@ -1,0 +1,93 @@
+name: dockercompose16572088298105127278
+services:
+  csms:
+    build:
+      context: D:\CSMS\CSMS\app\CSMS\CSMS
+      dockerfile: Dockerfile
+      target: build
+    container_name: dotnet6
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      target: 8080
+      published: "8081"
+      protocol: tcp
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      target: 80
+      published: "80"
+      protocol: tcp
+    restart: always
+    volumes:
+    - type: bind
+      source: E:\ymd\vs\CSMS\CSMS\app\CSMS\nginx
+      target: /etc/nginx/conf.d
+      bind:
+        create_host_path: true
+  nodejs:
+    command:
+    - npm
+    - start
+    container_name: node.js
+    environment:
+      NODE_ENV: production
+    image: node:18.17.1
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      target: 3000
+      published: "3000"
+      protocol: tcp
+    volumes:
+    - type: bind
+      source: D:/CSMS/CSMS/app
+      target: /usr/src/app
+      bind:
+        create_host_path: true
+    working_dir: /usr/src/app
+  pgadmin:
+    environment:
+      PGADMIN_DEFAULT_EMAIL: naha022677@icloud.com
+      PGADMIN_DEFAULT_PASSWORD: postgres
+      TZ: Asia/Tokyo
+    image: dpage/pgadmin4
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      target: 80
+      published: "8888"
+      protocol: tcp
+    restart: always
+  postgresql:
+    container_name: postgres
+    environment:
+      POSTGRES_DB: CustomerMS
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+    image: postgres
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      target: 5432
+      published: "5432"
+      protocol: tcp
+    volumes:
+    - type: bind
+      source: E:\ymd\vs\CSMS\CSMS\app\CSMS\docker\pg
+      target: /var/lib/postgresql
+      bind:
+        create_host_path: true
+networks:
+  default:
+    name: dockercompose16572088298105127278_default

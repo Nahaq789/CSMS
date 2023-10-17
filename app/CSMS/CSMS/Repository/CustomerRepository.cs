@@ -6,7 +6,7 @@ using SQLitePCL;
 
 namespace CSMS.Repository
 {
-    public class CustomerRepository : IRepository<CustomerModel>
+    public class CustomerRepository : ICustomerRepository<CustomerModel>
     {
         private readonly ApplicationDbContext _context;
         private DbSet<CustomerModel> DbSet { get; set; }
@@ -27,14 +27,17 @@ namespace CSMS.Repository
         }
         public async Task<IEnumerable<CustomerModel>> GetAll()
         {
-            var result = await DbSet.ToListAsync();
+            var result = await DbSet.Include(x => x.Associates).ToListAsync();
             if (result == null) { throw new Exception(); }
             return result;
         }
         public void Add (CustomerModel customerModel)
         {
+            customerModel.CustomerId = Guid.NewGuid();
             DbSet.Add(customerModel);
-            _context.SaveChanges();
+            _context.SaveChangesAsync();
+            return Task.FromResult(0);
+            return Task.CompletedTask;
         }
         public void Update (CustomerModel customerModel)
         {
