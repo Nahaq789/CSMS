@@ -1,39 +1,67 @@
 ﻿using CSMS.DomainService.Interface;
 using CSMS.Models;
-using CSMS.Repository;
+
+using Microsoft.EntityFrameworkCore;
+using CSMS.DomainInterface;
+
 
 namespace CSMS.DomainService
 {
-    public class CustomerService : IDomainService<CustomerModel>
+    public class CustomerService : IBaseEntityID
     {
-        private IRepository<CustomerModel> _CustomerRepository;
+        private readonly ApplicationDbContext _context;
+        private DbSet<CustomerModel> DbSet { get; set; }
+        public Guid id { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public CustomerService (IRepository<CustomerModel> CustomerRepository)
+        public CustomerService (ApplicationDbContext context)
         {
-            this._CustomerRepository = CustomerRepository;
+            this._context = context;
+            DbSet = _context.Set<CustomerModel>();
         }
-        public Task<CustomerModel> GetByID(int id)
+        public async Task<CustomerModel> GetByID(int id)
         {
-            var result = _CustomerRepository.GetByID(id);
+            var result = await DbSet.FindAsync(id);
+            if (result == null)
+            {
+                throw new Exception();
+            }
             return result;
         }
-        public Task<IEnumerable<CustomerModel>> GetAll()
+        public async Task<IEnumerable<CustomerModel>> GetAll()
         {
-            var result = _CustomerRepository.GetAll();
+            var result = await DbSet.ToListAsync();
+            if (result == null) { throw new Exception(); }
             return result;
         }
-        public void Add (CustomerModel customerModel)
+        public async Task<CustomerModel> Add(string name, string email)
         {
-            _CustomerRepository.Add(customerModel);
+            id = Guid.NewGuid();
+            //customerModel.CustomerId = Guid.NewGuid();
+            CustomerModel customerModel = new CustomerModel(id, name, email);
+            DbSet.Add(customerModel);
+            _context.SaveChanges();
+            return await Task.FromResult(customerModel);
         }
-        public void Update (CustomerModel customerModel)
+        public async Task<CustomerModel> Update (CustomerModel customerModel)
         {
-            _CustomerRepository.Update(customerModel);
+            DbSet.Attach(customerModel);
+            _context.Entry(customerModel).State = EntityState.Modified;
+            _context.SaveChanges();
+            return await Task.FromResult(customerModel);
         }
-        public void Delete (int id)
+        public async Task<bool> Delete(int id)
         {
-            _CustomerRepository.Delete(id);
+            DbSet.Remove(await GetByID(id));
+            _context.SaveChanges();
+            return await Task.FromResult(true);
         }
+
+        //public Task AddAssociateCustomer(ICustomerRepositry repositry, int otherId)
+        //{
+        //    var other = await Repository.GetById(targetId);
+        //    Associates.Add(other);
+        //    await repositry.Update(customer);
+        //}
     }
 }
 

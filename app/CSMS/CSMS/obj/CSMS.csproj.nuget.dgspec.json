@@ -1,23 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "E:\\ymd\\vs\\CSMS\\CSMS\\app\\CSMS\\CSMS\\CSMS.csproj": {}
+    "D:\\CSMS\\CSMS\\app\\CSMS\\CSMS\\CSMS.csproj": {}
   },
   "projects": {
-    "E:\\ymd\\vs\\CSMS\\CSMS\\app\\CSMS\\CSMS\\CSMS.csproj": {
+    "D:\\CSMS\\CSMS\\app\\CSMS\\CSMS\\CSMS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\ymd\\vs\\CSMS\\CSMS\\app\\CSMS\\CSMS\\CSMS.csproj",
+        "projectUniqueName": "D:\\CSMS\\CSMS\\app\\CSMS\\CSMS\\CSMS.csproj",
         "projectName": "CSMS",
-        "projectPath": "E:\\ymd\\vs\\CSMS\\CSMS\\app\\CSMS\\CSMS\\CSMS.csproj",
-        "packagesPath": "C:\\Users\\r.yamada\\.nuget\\packages\\",
-        "outputPath": "E:\\ymd\\vs\\CSMS\\CSMS\\app\\CSMS\\CSMS\\obj\\",
+        "projectPath": "D:\\CSMS\\CSMS\\app\\CSMS\\CSMS\\CSMS.csproj",
+        "packagesPath": "C:\\Users\\owner\\.nuget\\packages\\",
+        "outputPath": "D:\\CSMS\\CSMS\\app\\CSMS\\CSMS\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\r.yamada\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\owner\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -25,7 +22,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\sdk\\7.0.302\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -44,6 +40,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "EntityFramework": {
+              "target": "Package",
+              "version": "[6.4.4, )"
+            },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
@@ -104,7 +104,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     }
