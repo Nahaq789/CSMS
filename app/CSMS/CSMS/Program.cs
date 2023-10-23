@@ -49,8 +49,8 @@ public class Startup
 {
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddScoped<IDomainService<CustomerModel>, CustomerService>();
-        services.AddScoped<IRepository<CustomerModel>, CustomerRepository>();
+        //services.AddScoped<IDomainService<CustomerModel>, CustomerService>();
+        //services.AddScoped<IRepository<CustomerModel>, CustomerRepository>();
 
         services.AddDbContext<ApplicationDbContext>();
     }
