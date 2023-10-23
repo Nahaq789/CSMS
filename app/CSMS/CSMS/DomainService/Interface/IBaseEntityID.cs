@@ -2,6 +2,6 @@
 {
     public interface IBaseEntityID
     {
-        public Guid id { get; protected set; }
+        public Guid EntityID { get; protected set; }
     }
 }

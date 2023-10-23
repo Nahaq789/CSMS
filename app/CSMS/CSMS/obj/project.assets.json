@@ -12209,19 +12209,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\owner\\.nuget\\packages\\": {}
+    "C:\\Users\\r.yamada\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\CSMS\\CSMS\\app\\CSMS\\CSMS\\CSMS.csproj",
+      "projectUniqueName": "E:\\ymd\\vs\\CSMS\\CSMS\\app\\CSMS\\CSMS\\CSMS.csproj",
       "projectName": "CSMS",
-      "projectPath": "D:\\CSMS\\CSMS\\app\\CSMS\\CSMS\\CSMS.csproj",
-      "packagesPath": "C:\\Users\\owner\\.nuget\\packages\\",
-      "outputPath": "D:\\CSMS\\CSMS\\app\\CSMS\\CSMS\\obj\\",
+      "projectPath": "E:\\ymd\\vs\\CSMS\\CSMS\\app\\CSMS\\CSMS\\CSMS.csproj",
+      "packagesPath": "C:\\Users\\r.yamada\\.nuget\\packages\\",
+      "outputPath": "E:\\ymd\\vs\\CSMS\\CSMS\\app\\CSMS\\CSMS\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
-        "C:\\Users\\owner\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\r.yamada\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -12229,6 +12233,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\sdk\\7.0.302\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -12311,7 +12316,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
       }
     }
   }
