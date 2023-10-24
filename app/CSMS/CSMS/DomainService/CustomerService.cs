@@ -7,8 +7,8 @@ using CSMS.DomainInterface;
 
 namespace CSMS.DomainService
 {
-    public class CustomerService : IBaseEntityID
-    {
+    public class CustomerService : IBaseEntityID, ICustomerService<CustomerModel>
+  {
         private readonly ApplicationDbContext _context;
         private DbSet<CustomerModel> DbSet { get; set; }
         public Guid EntityID { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }

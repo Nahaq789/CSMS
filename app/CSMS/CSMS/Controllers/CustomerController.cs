@@ -9,9 +9,9 @@ namespace CSMS.Controllers
     [Route("[controller]")]
     public class CustomerController : Controller
     {
-        private IDomainService<CustomerModel> _customerService;
+        private ICustomerService<CustomerModel> _customerService;
 
-        public CustomerController(IDomainService<CustomerModel> customerService)
+        public CustomerController(ICustomerService<CustomerModel> customerService)
         {
             this._customerService = customerService;
         }
