@@ -17,9 +17,15 @@ namespace CSMS.Controllers
         }
 
         [HttpGet(Name = "AllCustomers")]
-        public Task<IEnumerable<CustomerModel>> GetAll()
+        public async Task<IEnumerable<CustomerModel>> GetAll()
         {
-            var result = _customerService.GetAll();
+            var result = await _customerService.GetAll();
+            return result;
+        }
+
+        public async Task<CustomerModel> GetByID(int id) 
+        {
+            var result = await _customerService.GetByID(id);
             return result;
         }
     }
