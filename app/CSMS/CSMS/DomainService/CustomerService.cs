@@ -18,7 +18,7 @@ namespace CSMS.DomainService
             this._context = context;
             DbSet = _context.Set<CustomerModel>();
         }
-        public async Task<CustomerModel> GetByID(int id)
+        public async Task<CustomerModel> GetByID(Guid id)
         {
             var result = await DbSet.FindAsync(id);
             if (result == null)
@@ -49,7 +49,7 @@ namespace CSMS.DomainService
             _context.SaveChanges();
             return await Task.FromResult(customerModel);
         }
-        public async Task<bool> Delete(int id)
+        public async Task<bool> Delete(Guid id)
         {
             DbSet.Remove(await GetByID(id));
             _context.SaveChanges();

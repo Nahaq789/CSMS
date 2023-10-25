@@ -15,6 +15,10 @@ namespace CSMS.Models
         [Required, NotNull, StringLength(30)]
         public string Email { get; private set; }
 
+        public CustomerModel() 
+        {
+        
+        }
 
         public CustomerModel(Guid id, string name, string email) 
         {
