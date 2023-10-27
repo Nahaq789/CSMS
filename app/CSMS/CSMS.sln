@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSMS", "CSMS\CSMS.csproj", "{7EC3FAE4-C7E0-42FF-9AA5-77875DC01D79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSMS", "CSMS\CSMS.csproj", "{7EC3FAE4-C7E0-42FF-9AA5-77875DC01D79}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{F30B7B4F-1B90-44B8-B1FD-77577DF68F7F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCSMS", "..\TestCSMS\TestCSMS.csproj", "{053ED3BD-1B44-478E-B28A-DFCF7994EBC2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{F30B7B4F-1B90-44B8-B1FD-77577DF68F7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F30B7B4F-1B90-44B8-B1FD-77577DF68F7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F30B7B4F-1B90-44B8-B1FD-77577DF68F7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{053ED3BD-1B44-478E-B28A-DFCF7994EBC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{053ED3BD-1B44-478E-B28A-DFCF7994EBC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{053ED3BD-1B44-478E-B28A-DFCF7994EBC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{053ED3BD-1B44-478E-B28A-DFCF7994EBC2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

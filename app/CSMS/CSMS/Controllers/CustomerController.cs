@@ -23,7 +23,7 @@ namespace CSMS.Controllers
             return result;
         }
 
-        public async Task<CustomerModel> GetByID(int id) 
+        public async Task<CustomerModel> GetByID(Guid id) 
         {
             var result = await _customerService.GetByID(id);
             return result;
