@@ -5,13 +5,14 @@ public class ApplicationDbContext : DbContext
 {
     public DbSet<CustomerModel> Customers { get; set; }
     private readonly IConfiguration _configuration;
-    public ApplicationDbContext (DbContextOptions <ApplicationDbContext> options, IConfiguration configuration) : base(options)
+
+    public ApplicationDbContext() { }
+    public ApplicationDbContext (DbContextOptions <ApplicationDbContext> options) : base(options)
     {
-        this._configuration = configuration;
     }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));
+        //optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));
     }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -21,4 +22,4 @@ public class ApplicationDbContext : DbContext
         // テーブルを再構築しないようにする
         modelBuilder.Entity<CustomerModel>().ToTable("Customers");
     }
-}
+} 

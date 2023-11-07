@@ -63,7 +63,7 @@ public class Startup
         //services.AddScoped<IDomainService<CustomerModel>, CustomerService>();
         //services.AddScoped<IRepository<CustomerModel>, CustomerRepository>();
 
-        services.AddDbContext<ApplicationDbContext>();
+        services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

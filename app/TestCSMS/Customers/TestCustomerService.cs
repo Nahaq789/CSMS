@@ -1,39 +1,64 @@
 ﻿using CSMS.DomainService;
-
+using CSMS.Models;
+using NuGet.ContentModel;
+using TestCSMS;
 
 namespace CSMS.Test.Customers
 {
-    public class Startup
+    public class TestCustomerService : IClassFixture<TestDatabaseFixture>
     {
-        public class TestCustomerService : IDisposable
+        private ApplicationDbContext _context { get; set; }
+        public TestCustomerService(ApplicationDbContext context)
         {
-            private ApplicationDbContext _context { get; }
-            public TestCustomerService(ApplicationDbContext context)
-            {
-                this._context = context;
-            }
+            this._context = context;
+        }
 
-            [Fact]
-            public async void GetByID()
-            {
-                var guid = Guid.NewGuid();
+        [Fact]
+        public async void GetByID()
+        {
+            var guid = Guid.NewGuid();
 
-                var reader = new CustomerService(_context);
-                var result = await reader.GetByID(guid);
+            var reader = new CustomerService(_context);
+            var result = await reader.GetByID(guid);
 
-                Assert.NotNull(result);
-            }
+            Assert.NotNull(result);
+        }
 
-            public void Dispose()
-            {
+        [Fact]
+        public async void GetAll()
+        {
+            var reaser = new CustomerService(_context);
+            var result = await reaser.GetAll();
 
-            }
+            Assert.NotNull(result);
+        }
 
-            public void Test_NotIMplemented()
-            {
-                throw new NotImplementedException();
-            }
+        [Fact]
+        public async void Add()
+        {
+            var guid = Guid.NewGuid();
+
+            CustomerModel customer = new CustomerModel(
+                    guid,
+                    "test",
+                    "test@email.com",
+                    23
+                );
+
+            var reader = new CustomerService(_context);
+            var result = await reader.Add("test", "test@email.com", 23);
+
+            Asset.Equals(customer, result);
+        }
+
+        public void Dispose()
+        {
+
+        }
+
+        public void Test_NotIMplemented()
+        {
+            throw new NotImplementedException();
         }
     }
-    
 }

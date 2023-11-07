@@ -1,12 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.Diagnostics;
+using System.Transactions;
 using TestCSMS.DB;
 
 namespace TestCSMS
 {
     public class TestDatabaseFixture
     {
-        private string ConnectionString = "Server=postgresql;" + "Port=5432;" + "Database=CustomerMS;" + "User Id=postgres;" + "Password=postgres;";
+        private string ConnectionString = "Server=localhost;" + "Port=5432;" + "Database=TestCustomerMS;" + "Username=postgres;" + "Password=postgres;";
 
         private static readonly object _lock = new();
         private static bool _databaseInitialized;
@@ -20,12 +22,19 @@ namespace TestCSMS
                 {
                     using (var context = CreateContext())
                     {
-                        context.Database.EnsureDeleted();
-                        context.Database.EnsureCreated();
+                        try
+                        {
+                            context.Database.EnsureDeleted();
+                            context.Database.EnsureCreated();
 
-                        GlobalSeed.SetSeeds(context);
+                            GlobalSeed.SetSeeds(context);
 
-                        context.SaveChanges();
+                            context.SaveChanges();
+                        }catch (Exception ex)
+                        {
+                            Debug.WriteLine(ex);
+                        }
+                        
                     }
 
                     _databaseInitialized = true;
@@ -42,6 +51,6 @@ namespace TestCSMS
                     .UseNpgsql(ConnectionString)
                     .EnableSensitiveDataLogging()
                     .LogTo(message => System.Diagnostics.Debug.WriteLine(message))
-                    .Options, AppGlobalObject.Configuration);
+                    .Options);
     }
 }

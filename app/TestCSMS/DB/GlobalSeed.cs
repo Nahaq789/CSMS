@@ -14,13 +14,15 @@ namespace TestCSMS.DB
             using var t = context.Database.BeginTransaction();
             SetUpCustomers(context);
             context.SaveChanges();
+            t.Commit();
         }
         private static void SetUpCustomers(ApplicationDbContext context)
         {
             var Customers = new CustomerModel(
                     Guid.NewGuid(),
-                    "naha",
-                    "naha@gmail.com"
+                    "nahaq",
+                    "nahaq@gmail.com",
+                    23
                 );
             context.Customers.Add(Customers);
         }

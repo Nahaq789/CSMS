@@ -14,17 +14,19 @@ namespace CSMS.Models
         public string Name { get; private set; }
         [Required, NotNull, StringLength(30)]
         public string Email { get; private set; }
-
+        [Required]
+        public int Age { get; private set; }
         public CustomerModel() 
         {
         
         }
 
-        public CustomerModel(Guid id, string name, string email) 
+        public CustomerModel(Guid id, string name, string email, int age) 
         {
             this.CustomerId = id;
             this.Name = name;
             this.Email = email;
+            this.Age = age;
         }
         //public Guid AssociateId { get; set; }
         //public ICollection<CustomerModel> Associates { get; set; }
