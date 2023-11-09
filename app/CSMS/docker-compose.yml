@@ -1,17 +1,4 @@
 version: '3.4'
-
-# services:
-#   csms:
-#     environment:
-#       - ASPNETCORE_ENVIRONMENT=Development
-#       - ASPNETCORE_URLS=https://+:443;http://+:80
-#     ports:
-#       - "80"
-#       - "443"
-#     volumes:
-#       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-#       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
-
 services:
   # csms:
   #   container_name: dotnet6
@@ -34,17 +21,33 @@ services:
       environment:
         - ASPNETCORE_ENVIRONMENT=Development
   
-  postgresql:
-    container_name: postgres
-    image: postgres
-    volumes:
-        - ./docker/pg:/var/lib/postgresql
-    environment:
-        POSTGRES_USER: postgres
-        POSTGRES_PASSWORD: postgres
-        POSTGRES_DB: CustomerMS
-    ports:
-      - '5432:5432'
+  # postgresql:
+  #   container_name: postgres
+  #   image: postgres
+  #   volumes:
+  #       # - ./docker/pg:/var/lib/postgresql/data
+  #       - db-main:/var/lib/postgresql/data
+  #   environment:
+  #       POSTGRES_USER: postgres
+  #       POSTGRES_PASSWORD: postgres
+  #       POSTGRES_DB: CustomerMS
+  #       PGDATA: /var/lib/postgresql/data/pgdata
+  #   ports:
+  #     - '5432:5432'
+
+  # testdb:
+  #   container_name: testdb
+  #   image: postgres
+  #   volumes: 
+  #       # - ./docker/pg:/var/lib/postgresql/data
+  #       - db-data:/var/lib/postgresql/data
+  #   environment:
+  #       POSTGRES_USER: postgres
+  #       POSTGRES_PASSWORD: postgres
+  #       POSTGRES_DB: TestCustomerMS
+  #       PGDATA: /var/lib/postgresql/data/pgdata2
+  #   ports:
+  #     - '5431:5431'
 
   nginx:
     image: nginx:latest 
@@ -67,12 +70,18 @@ services:
       - NODE_ENV=production 
     command: ["npm", "start"]  
 
-  pgadmin:
-    image: dpage/pgadmin4
-    restart: always
-    ports:
-      - "8888:80"
-    environment:
-      TZ: Asia/Tokyo
-      PGADMIN_DEFAULT_EMAIL: 'naha022677@icloud.com'
-      PGADMIN_DEFAULT_PASSWORD: 'postgres'
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   restart: always
+  #   ports:
+  #     - "8888:80"
+  #   environment:
+  #     TZ: Asia/Tokyo
+  #     PGADMIN_DEFAULT_EMAIL: 'naha022677@icloud.com'
+  #     PGADMIN_DEFAULT_PASSWORD: 'postgres'
+
+# volumes:
+#   db-data:
+#     driver: local
+#   db-main:
+#     driver: local

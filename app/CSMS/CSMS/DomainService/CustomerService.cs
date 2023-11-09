@@ -11,7 +11,7 @@ namespace CSMS.DomainService
   {
         private readonly ApplicationDbContext _context;
         private DbSet<CustomerModel> DbSet { get; set; }
-        public Guid EntityID { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Guid EntityID { get; set; }
 
         public CustomerService (ApplicationDbContext context)
         {
@@ -33,11 +33,11 @@ namespace CSMS.DomainService
             if (result == null) { throw new Exception(); }
             return result;
         }
-        public async Task<CustomerModel> Add(string name, string email)
+        public async Task<CustomerModel> Add(string name, string email, int age)
         {
             EntityID = Guid.NewGuid();
             //customerModel.CustomerId = Guid.NewGuid();
-            CustomerModel customerModel = new CustomerModel(EntityID, name, email);
+            CustomerModel customerModel = new CustomerModel(EntityID, name, email, age);
             DbSet.Add(customerModel);
             _context.SaveChanges();
             return await Task.FromResult(customerModel);

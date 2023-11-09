@@ -16,6 +16,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//DI
+StartupDI.Setup(builder);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -47,15 +50,28 @@ public partial class Program
 
 public class Startup
 {
+    public Startup(IConfiguration configuration)
+    {
+        AppGlobalObject.Configuration = configuration;
+        Configuration = configuration;
+    }
+
+    public IConfiguration Configuration { get; }
+
     public void ConfigureServices(IServiceCollection services)
     {
         //services.AddScoped<IDomainService<CustomerModel>, CustomerService>();
         //services.AddScoped<IRepository<CustomerModel>, CustomerRepository>();
 
-        services.AddDbContext<ApplicationDbContext>();
+        services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
     }
+}
+
+public class AppGlobalObject
+{
+    public static IConfiguration Configuration { get; set; }
 }
