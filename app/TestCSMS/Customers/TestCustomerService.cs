@@ -16,11 +16,17 @@ namespace CSMS.Test.Customers
         [Fact]
         public async void GetByID()
         {
-            var guid = Guid.NewGuid();
-
             var reader = new CustomerService(_context);
-            var result = await reader.GetByID(guid);
 
+            CustomerModel customer = new CustomerModel(
+                    "test123",
+                    "test123@email.com",
+                    26
+                );
+            await reader.Add(customer);
+            var result = await reader.GetByID(customer.CustomerId);
+
+            Assert.Equal(customer.CustomerId, result.CustomerId);
             Assert.NotNull(result);
         }
 
@@ -36,29 +42,41 @@ namespace CSMS.Test.Customers
         [Fact]
         public async void Add()
         {
-            var guid = Guid.NewGuid();
-
             CustomerModel customer = new CustomerModel(
-                    guid,
                     "test",
                     "test@email.com",
                     23
                 );
 
             var reader = new CustomerService(_context);
-            var result = await reader.Add("test", "test@email.com", 23);
+            var result = await reader.Add(customer);
 
-            Asset.Equals(customer, result);
+            Assert.Equal(customer.CustomerId, result);
         }
 
-        public void Dispose()
+        [Fact]
+        public async void Update()
         {
+            var reader = new CustomerService(_context);
+            CustomerModel beforeCustomer = new CustomerModel(
+                    "before",
+                    "before@email.com",
+                    11
+                );
 
-        }
-
-        public void Test_NotIMplemented()
-        {
-            throw new NotImplementedException();
+            await reader.Add(beforeCustomer);
+            CustomerModel AfterCustomer = new CustomerModel(
+                    beforeCustomer.CustomerId,
+                    "after",
+                    "after@email.com",
+                    88
+                );
+            
+            var result = await reader.Update(AfterCustomer);
+            Assert.Equal(result.CustomerId, AfterCustomer.CustomerId);
+            Assert.Equal(result.Name, AfterCustomer.Name);
+            Assert.Equal(result.Email, AfterCustomer.Email);
+            Assert.Equal(result.Age, AfterCustomer.Age);
         }
     }
 }

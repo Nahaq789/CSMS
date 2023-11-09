@@ -19,7 +19,6 @@ namespace TestCSMS.DB
         private static void SetUpCustomers(ApplicationDbContext context)
         {
             var Customers = new CustomerModel(
-                    Guid.NewGuid(),
                     "nahaq",
                     "nahaq@gmail.com",
                     23

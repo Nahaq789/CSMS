@@ -20,7 +20,7 @@ namespace CSMS.DomainService
         }
         public async Task<CustomerModel> GetByID(Guid id)
         {
-            var result = await DbSet.FindAsync(id);
+            var result = await _context.Customers.FindAsync(id);
             if (result == null)
             {
                 throw new Exception();
@@ -33,21 +33,50 @@ namespace CSMS.DomainService
             if (result == null) { throw new Exception(); }
             return result;
         }
-        public async Task<CustomerModel> Add(string name, string email, int age)
+        public async Task<Guid> Add(CustomerModel customer)
         {
-            EntityID = Guid.NewGuid();
-            //customerModel.CustomerId = Guid.NewGuid();
-            CustomerModel customerModel = new CustomerModel(EntityID, name, email, age);
-            DbSet.Add(customerModel);
-            _context.SaveChanges();
-            return await Task.FromResult(customerModel);
+            try
+            {
+                await _context.AddAsync(customer);
+                _context.SaveChanges();
+                return customer.CustomerId;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
         }
-        public async Task<CustomerModel> Update (CustomerModel customerModel)
+        public async Task<bool> Update(CustomerModel customer)
         {
-            DbSet.Attach(customerModel);
-            _context.Entry(customerModel).State = EntityState.Modified;
-            _context.SaveChanges();
-            return await Task.FromResult(customerModel);
+            var transaction = _context.Database.CurrentTransaction;
+            if(transaction != null)
+            {
+                await transaction.CreateSavepointAsync("Update");
+            }
+            try
+            {
+                CustomerModel customerModel = new CustomerModel(
+                    customer.CustomerId,
+                    customer.Name,
+                    customer.Email,
+                    customer.Age
+                );
+
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if(transaction != null)
+                {
+                    await transaction.RollbackToSavepointAsync("Update");
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    throw;
+                }
+                return false;
+            }
+            
         }
         public async Task<bool> Delete(Guid id)
         {
