@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using static CSMS.GlobalEnum.GlobalEnum;
 
 namespace CSMS.DomainService.Interface
 {
@@ -7,7 +8,7 @@ namespace CSMS.DomainService.Interface
         public Task<T> GetByID(Guid id);
         public Task<IEnumerable<T>> GetAll();
         public Task<Guid> Add(T TEntity);
-        public Task<bool> Delete(Guid id);
-        public Task<T> Update(T entity);
+        public Task<DeleteResult> Delete(T TEntity);
+        public Task<UpdateResult> Update(T entity);
     }
 }

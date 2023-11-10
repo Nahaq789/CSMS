@@ -3,7 +3,7 @@ using CSMS.Models;
 
 using Microsoft.EntityFrameworkCore;
 using CSMS.DomainInterface;
-
+using static CSMS.GlobalEnum.GlobalEnum;
 
 namespace CSMS.DomainService
 {
@@ -20,21 +20,63 @@ namespace CSMS.DomainService
         }
         public async Task<CustomerModel> GetByID(Guid id)
         {
-            var result = await _context.Customers.FindAsync(id);
-            if (result == null)
+            var transaction = _context.Database.CurrentTransaction;
+            if (transaction != null)
             {
+                await transaction.CreateSavepointAsync("GetByID");
+            }
+            try
+            {
+                var result = await _context.Customers.FindAsync(id);
+                if (result == null)
+                {
+                    throw new Exception();
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                if (transaction != null)
+                {
+                    await transaction.RollbackToSavepointAsync("GetByID");
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    throw;
+                }
                 throw new Exception();
             }
-            return result;
+            
         }
         public async Task<IEnumerable<CustomerModel>> GetAll()
         {
-            var result = await DbSet.ToListAsync();
-            if (result == null) { throw new Exception(); }
-            return result;
+            var transaction = _context.Database.CurrentTransaction;
+            if (transaction != null)
+            {
+                await transaction.CreateSavepointAsync("GetAll");
+            }
+            try
+            {
+                var result = await DbSet.ToListAsync();
+                if (result == null) { throw new Exception(); }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                if (transaction != null)
+                {
+                    await transaction.RollbackToSavepointAsync("GetAll");
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    throw;
+                }
+                throw new Exception();
+            }
         }
         public async Task<Guid> Add(CustomerModel customer)
         {
+            var transaction = _context.Database.CurrentTransaction;
+            if (transaction != null)
+            {
+                await transaction.CreateSavepointAsync("Add");
+            }
             try
             {
                 await _context.AddAsync(customer);
@@ -43,10 +85,16 @@ namespace CSMS.DomainService
             }
             catch (Exception ex)
             {
+                if (transaction != null)
+                {
+                    await transaction.RollbackToSavepointAsync("Add");
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    throw;
+                }
                 throw new Exception();
             }
         }
-        public async Task<bool> Update(CustomerModel customer)
+        public async Task<UpdateResult> Update(CustomerModel customer)
         {
             var transaction = _context.Database.CurrentTransaction;
             if(transaction != null)
@@ -55,6 +103,8 @@ namespace CSMS.DomainService
             }
             try
             {
+                var target = await _context.Customers.FirstOrDefaultAsync(x => x.CustomerId == customer.CustomerId);
+                if (target == null) { throw new Exception(); }
                 CustomerModel customerModel = new CustomerModel(
                     customer.CustomerId,
                     customer.Name,
@@ -62,9 +112,14 @@ namespace CSMS.DomainService
                     customer.Age
                 );
 
+                _context.Customers.Entry(target).State = EntityState.Detached;
+
+                _context.Customers.Attach(customerModel);
+
+                _context.Customers.Update(customerModel);
                 await _context.SaveChangesAsync();
 
-                return true;
+                return UpdateResult.Success;
             }
             catch (Exception ex)
             {
@@ -74,15 +129,32 @@ namespace CSMS.DomainService
                     System.Diagnostics.Debug.WriteLine(ex.Message);
                     throw;
                 }
-                return false;
+                return UpdateResult.Failed;
             }
-            
         }
-        public async Task<bool> Delete(Guid id)
+        public async Task<DeleteResult> Delete(CustomerModel customer)
         {
-            DbSet.Remove(await GetByID(id));
-            _context.SaveChanges();
-            return await Task.FromResult(true);
+            var transaction = _context.Database.CurrentTransaction;
+            if (transaction != null)
+            {
+                await transaction.CreateSavepointAsync("Delete");
+            }
+            try
+            {
+                _context.Customers.Remove(customer);
+                await _context.SaveChangesAsync();
+                return DeleteResult.Success;
+            }
+            catch (Exception ex)
+            {
+                if (transaction != null)
+                {
+                    await transaction.RollbackToSavepointAsync("Delete");
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    throw;
+                }
+                return DeleteResult.Failed;
+            }
         }
 
         //public Task AddAssociateCustomer(ICustomerRepositry repositry, int otherId)

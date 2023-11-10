@@ -10,10 +10,10 @@ public class ApplicationDbContext : DbContext
     public ApplicationDbContext (DbContextOptions <ApplicationDbContext> options) : base(options)
     {
     }
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        //optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));
-    }
+    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //{
+    //    optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));
+    //}
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

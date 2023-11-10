@@ -2,6 +2,7 @@
 using CSMS.Models;
 using NuGet.ContentModel;
 using TestCSMS;
+using static CSMS.GlobalEnum.GlobalEnum;
 
 namespace CSMS.Test.Customers
 {
@@ -72,11 +73,28 @@ namespace CSMS.Test.Customers
                     88
                 );
             
-            var result = await reader.Update(AfterCustomer);
-            Assert.Equal(result.CustomerId, AfterCustomer.CustomerId);
-            Assert.Equal(result.Name, AfterCustomer.Name);
-            Assert.Equal(result.Email, AfterCustomer.Email);
-            Assert.Equal(result.Age, AfterCustomer.Age);
+            await reader.Update(AfterCustomer);
+            var select = await reader.GetByID(beforeCustomer.CustomerId);
+            Assert.NotEqual(beforeCustomer.Name, select.Name);
+            Assert.NotEqual(beforeCustomer.Email, select.Email);
+            Assert.NotEqual(beforeCustomer.Age, select.Age);
+            Assert.Equal(beforeCustomer.CustomerId, select.CustomerId);
+        }
+
+        [Fact]
+        public async void Delete()
+        {
+            var reader = new CustomerService(_context);
+
+            CustomerModel deleteCustomer = new CustomerModel(
+                    "delete",
+                    "delete@email.com",
+                    300
+                );
+
+            await reader.Add(deleteCustomer);
+            var result = await reader.Delete(deleteCustomer);
+            Assert.Equal(DeleteResult.Success, result);
         }
     }
 }
