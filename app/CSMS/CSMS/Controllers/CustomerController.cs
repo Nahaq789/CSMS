@@ -1,4 +1,5 @@
-﻿using CSMS.DomainService;
+﻿using CSMS.DomainInterface;
+using CSMS.DomainService;
 using CSMS.DomainService.Interface;
 using CSMS.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -6,8 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace CSMS.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class CustomerController : Controller
+    [Route("api/[controller]")]
+    public class CustomerController : ControllerBase
     {
         private ICustomerService<CustomerModel> _customerService;
 
@@ -16,17 +17,39 @@ namespace CSMS.Controllers
             this._customerService = customerService;
         }
 
-        [HttpGet(Name = "AllCustomers")]
+        [HttpGet]
         public async Task<IEnumerable<CustomerModel>> GetAll()
         {
-            var result = await _customerService.GetAll();
-            return result;
+            try
+            {
+                var result = await _customerService.GetAll();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
+            
         }
 
         public async Task<CustomerModel> GetByID(Guid id) 
         {
-            var result = await _customerService.GetByID(id);
-            return result;
+            try
+            {
+                var result = await _customerService.GetByID(id);
+                return result;
+            }
+            catch(Exception ex)
+            {
+                throw new Exception();
+            }
+        }
+        [HttpPost]
+        public async Task<Guid> Add(CustomerModel customer)
+        {
+            await _customerService.Add(customer);
+
+            return customer.CustomerId;
         }
     }
 }
