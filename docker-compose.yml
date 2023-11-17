@@ -36,9 +36,23 @@ services:
       TZ: Asia/Tokyo
       PGADMIN_DEFAULT_EMAIL: 'naha022677@icloud.com'
       PGADMIN_DEFAULT_PASSWORD: 'postgres'
+      
+  # nodejs:
+  #   container_name: nodejs
+  #   node:
+  #    build:
+  #      context: ../app/React/docker/nodejs
+  #      dockerfile: Dockerfile
+  #    volumes:
+  #     - ./:/usr/src/app
+  #    command: sh -c "cd reacrpage && yarn start"
+  #    ports:
+  #     - "3000:3000"
 
 volumes:
   db-data:
     driver: local
   db-main:
     driver: local
+
+  
