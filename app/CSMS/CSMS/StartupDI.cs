@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CSMS.DomainService;
+using CSMS.DomainService.Interface;
+using CSMS.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 public class StartupDI
@@ -14,5 +17,6 @@ public class StartupDI
             option.UseNpgsql(connectionString);
         });
 
+        builder.Services.AddScoped<ICustomerService<CustomerModel>, CustomerService>();
     }
 }

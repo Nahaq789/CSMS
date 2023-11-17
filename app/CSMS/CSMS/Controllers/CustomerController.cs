@@ -29,9 +29,10 @@ namespace CSMS.Controllers
             {
                 throw new Exception();
             }
-            
+
         }
 
+        [HttpGet("{id}")]
         public async Task<CustomerModel> GetByID(Guid id) 
         {
             try
@@ -45,7 +46,7 @@ namespace CSMS.Controllers
             }
         }
         [HttpPost]
-        public async Task<Guid> Add(CustomerModel customer)
+        public async Task<Guid> Add([FromBody] CustomerModel customer)
         {
             await _customerService.Add(customer);
 

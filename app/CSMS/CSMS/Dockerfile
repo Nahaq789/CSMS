@@ -22,31 +22,6 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "CSMS.dll"]
-#
-#FROM mcr.microsoft.com/dotnet/sdk:6.0 AS base
-#WORKDIR /app
-#COPY CSMS.csproj .
-#RUN dotnet restore
-#COPY . .
-#RUN dotnet publish -c Release -o /app/publish
-#
-#FROM mcr.microsoft.com/dotnet/aspnet:6.0
-#ENV ASPNETCORE_URLS=http://+:8080
-#WORKDIR /app
-#COPY --from=base /app/publish .
-#ENTRYPOINT [ "dotnet", "CSMS.dll" ]
 
-#FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-#WORKDIR /source
-#COPY . .
-#RUN dotnet restore "CSMS.csproj" 
-#RUN dotnet publish "CSMS.csproj" -c release -o /app --no-restore
-#
-#FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
-#WORKDIR /app
-#COPY --from=build /app ./
-#
-#EXPOSE 5000
-#
-#ENTRYPOINT ["dotnet", "CSMS.dll"]
+
 

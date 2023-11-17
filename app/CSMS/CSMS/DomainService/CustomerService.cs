@@ -55,7 +55,7 @@ namespace CSMS.DomainService
             }
             try
             {
-                var result = await DbSet.ToListAsync();
+                var result = await _context.Customers.ToListAsync();
                 if (result == null) { throw new Exception(); }
                 return result;
             }

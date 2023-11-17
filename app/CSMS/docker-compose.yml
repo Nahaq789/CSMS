@@ -13,7 +13,7 @@ services:
   csms:
       container_name: dotnet6
       build:
-        context: D:\CSMS\CSMS\app\CSMS\CSMS  
+        context: ./CSMS
         dockerfile: Dockerfile  
         target: build
       ports:
@@ -49,26 +49,26 @@ services:
   #   ports:
   #     - '5431:5431'
 
-  nginx:
-    image: nginx:latest 
-    container_name: nginx
-    ports:
-      - "80:80" 
-    volumes:
-      - ./nginx:/etc/nginx/conf.d 
-    restart: always 
+  #nginx:
+  #  image: nginx:latest 
+  #  container_name: nginx
+  #  ports:
+  #    - "80:80" 
+  #  volumes:
+  #    - ./nginx:/etc/nginx/conf.d 
+  #  restart: always 
 
-  nodejs:
-    image: node:18.17.1 
-    container_name: node.js 
-    working_dir: /usr/src/app 
-    volumes:
-      - D:/CSMS/CSMS/app:/usr/src/app 
-    ports:
-      - "3000:3000" 
-    environment:
-      - NODE_ENV=production 
-    command: ["npm", "start"]  
+  #nodejs:
+  #  image: node:18.17.1 
+  #  container_name: node.js 
+  #  working_dir: /usr/src/app 
+  #  volumes:
+  #    - D:/CSMS/CSMS/app:/usr/src/app 
+  #  ports:
+  #    - "3000:3000" 
+  #  environment:
+  #    - NODE_ENV=production 
+  #  command: ["npm", "start"]  
 
   # pgadmin:
   #   image: dpage/pgadmin4
