@@ -10,9 +10,9 @@ namespace CSMS.Models
     {
         [Key]
         public Guid CustomerId { get; private set; }
-        [Required, NotNull, StringLength(30)]
+        [Required, NotNull, StringLength(35)]
         public string Name { get; private set; }
-        [Required, NotNull, StringLength(30)]
+        [Required, NotNull, StringLength(35)]
         public string Email { get; private set; }
         [Required]
         public int Age { get; private set; }

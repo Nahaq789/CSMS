@@ -29,7 +29,6 @@ namespace CSMS.Controllers
             {
                 throw new Exception();
             }
-
         }
 
         [HttpGet("{id}")]

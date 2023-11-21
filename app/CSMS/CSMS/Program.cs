@@ -1,3 +1,4 @@
+using CSMS.Controllers;
 using CSMS.DomainService;
 using CSMS.DomainService.Interface;
 using CSMS.Models;
@@ -64,6 +65,7 @@ public class Startup
         //services.AddScoped<IRepository<CustomerModel>, CustomerRepository>();
 
         services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+        services.AddTransient<ICustomerService<CustomerModel>, CustomerService>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
