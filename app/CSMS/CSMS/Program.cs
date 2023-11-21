@@ -64,6 +64,7 @@ public class Startup
         //services.AddScoped<IDomainService<CustomerModel>, CustomerService>();
         //services.AddScoped<IRepository<CustomerModel>, CustomerRepository>();
 
+        services.AddCors();
         services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
         services.AddTransient<ICustomerService<CustomerModel>, CustomerService>();
     }
