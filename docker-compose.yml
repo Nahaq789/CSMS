@@ -1,6 +1,6 @@
-version: '3.4'
+version: '3.8'
 services:
-  postgresql:
+  db:
     container_name: postgres
     image: postgres
     volumes:
@@ -9,24 +9,27 @@ services:
     environment:
         POSTGRES_USER: postgres
         POSTGRES_PASSWORD: postgres
-        POSTGRES_DB: CustomerMS
+        #POSTGRES_DB: CustomerMS
         PGDATA: /var/lib/postgresql/data/pgdata
+        POSTGRES_INITDB_ARGS: 30
     ports:
-      - '5432:5400'
+      - '5432:5432'
+    extra_hosts:
+        - "host.docker.internal:host-gateway"
 
-  testdb:
-    container_name: testdb
-    image: postgres
-    volumes: 
-        # - ./docker/pg:/var/lib/postgresql/data
-        - db-data:/var/lib/postgresql/data
-    environment:
-        POSTGRES_USER: postgres
-        POSTGRES_PASSWORD: postgres
-        POSTGRES_DB: TestCustomerMS
-        PGDATA: /var/lib/postgresql/data/pgdata2
-    ports:
-      - '5431:5431'
+  # testdb:
+  #   container_name: testdb
+  #   image: postgres
+  #   volumes: 
+  #       # - ./docker/pg:/var/lib/postgresql/data
+  #       - db-data:/var/lib/postgresql/data
+  #   environment:
+  #       POSTGRES_USER: postgres
+  #       POSTGRES_PASSWORD: postgres
+  #       POSTGRES_DB: TestCustomerMS
+  #       PGDATA: /var/lib/postgresql/data/pgdata2
+  #   ports:
+  #     - '5431:5431'
   pgadmin:
     image: dpage/pgadmin4
     restart: always
@@ -55,4 +58,3 @@ volumes:
   db-main:
     driver: local
 
-  

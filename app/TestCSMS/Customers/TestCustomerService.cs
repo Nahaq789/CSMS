@@ -1,4 +1,5 @@
-﻿using CSMS.DomainService;
+﻿using CSMS.Controllers;
+using CSMS.DomainService;
 using CSMS.Models;
 using NuGet.ContentModel;
 using TestCSMS;
@@ -95,6 +96,15 @@ namespace CSMS.Test.Customers
             await reader.Add(deleteCustomer);
             var result = await reader.Delete(deleteCustomer);
             Assert.Equal(DeleteResult.Success, result);
+        }
+        [Fact]
+        public async void GetAllController()
+        {
+            var controller = new CustomerController(new CustomerService(_context));
+
+            var result = await controller.GetAll();
+
+            Assert.NotNull(result);
         }
     }
 }

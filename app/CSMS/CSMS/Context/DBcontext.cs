@@ -4,17 +4,17 @@ using Microsoft.EntityFrameworkCore;
 public class ApplicationDbContext : DbContext
 {
     public DbSet<CustomerModel> Customers { get; set; }
-    private readonly IConfiguration _configuration;
+    //private readonly IConfiguration _configuration;
 
     public ApplicationDbContext() { }
-    public ApplicationDbContext (DbContextOptions <ApplicationDbContext> options) : base(options)
+    public ApplicationDbContext (DbContextOptions<ApplicationDbContext> options) : base(options)
     {
     }
-    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //{
-    //    optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));
-    //}
-    
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseNpgsql();
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
