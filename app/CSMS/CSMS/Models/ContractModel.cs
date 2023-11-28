@@ -1,5 +1,5 @@
 ﻿using CSMS.Models.ValueObject;
-using MessagePack;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
@@ -9,12 +9,49 @@ namespace CSMS.Models
     {
         [Key]
         public Guid ContractId { get; private set; }
+
         [Required, NotNull, StringLength(50)]
         public string ContractName { get; private set; }
+
         [Required, NotNull, StringLength(50)]
         public string ContractCode { get; private set; }
-        public Guid? CustomerId { get; private set; }
-        public IMoneyModel Money { get; private set; }
 
+        public Guid? CustomerId { get; private set; }
+
+        public MoneyModel Money { get; private set; }
+
+        //public MoneyModel TaxMoney { get; private set; }
+
+        private ContractModel()
+        {
+        }
+
+        public ContractModel(
+            Guid contractId,
+            string contractName,
+            string contractCode,
+            Guid customerId,
+            MoneyModel money
+        )
+        {
+            this.ContractId = contractId;
+            this.ContractName = contractName;
+            this.ContractCode = contractCode;
+            this.CustomerId = customerId;
+            this.Money = money;
+        }
+
+        public ContractModel(
+            string contractName,
+            string contractCode,
+            Guid customerId,
+            MoneyModel money
+        )
+        {
+            this.ContractName = contractName;
+            this.ContractCode = contractCode;
+            this.CustomerId = customerId;
+            this.Money = money;
+        }
     }
 }

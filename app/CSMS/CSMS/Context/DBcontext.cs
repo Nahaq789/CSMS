@@ -1,10 +1,11 @@
 ﻿using CSMS.Models;
+using CSMS.Models.ValueObject;
 using Microsoft.EntityFrameworkCore;
 
 public class ApplicationDbContext : DbContext
 {
     public DbSet<CustomerModel> Customers { get; set; }
-    //private readonly IConfiguration _configuration;
+    public DbSet<ContractModel> Contracts { get; set; }
 
     public ApplicationDbContext() { }
     public ApplicationDbContext (DbContextOptions<ApplicationDbContext> options) : base(options)
@@ -21,5 +22,9 @@ public class ApplicationDbContext : DbContext
 
         // テーブルを再構築しないようにする
         modelBuilder.Entity<CustomerModel>().ToTable("Customers");
+        modelBuilder.Entity<ContractModel>().ToTable("Contracts");
+
+        modelBuilder.Entity<ContractModel>(entity => entity.OwnsOne(m => m.Money).Property(m => m.Money).HasColumnName("Money"));
+        modelBuilder.Entity<ContractModel>(entity => entity.OwnsOne(m => m.Money).Property(m => m.TaxMoney).HasColumnName("TaxMoney"));
     }
 } 
