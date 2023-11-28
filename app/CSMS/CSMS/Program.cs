@@ -66,7 +66,7 @@ public class Startup
 
         services.AddCors();
         services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
-        services.AddTransient<ICustomerService<CustomerModel>, CustomerService>();
+        services.AddScoped<ICustomerService<CustomerModel>, CustomerService>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
