@@ -24,7 +24,8 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<CustomerModel>().ToTable("Customers");
         modelBuilder.Entity<ContractModel>().ToTable("Contracts");
 
-        modelBuilder.Entity<ContractModel>(entity => entity.OwnsOne(m => m.Money).Property(m => m.Money).HasColumnName("Money"));
-        modelBuilder.Entity<ContractModel>(entity => entity.OwnsOne(m => m.Money).Property(m => m.TaxMoney).HasColumnName("TaxMoney"));
+        modelBuilder.Entity<ContractModel>(entity => entity.OwnsOne(m => m.Money).Property(m => m.Value).HasColumnName("Money"));
+        modelBuilder.Entity<ContractModel>(entity => entity.OwnsOne(m => m.TaxMoney).Property(m => m.Value).HasColumnName("TaxMoney"));
+        modelBuilder.Entity<ContractModel>(entity => entity.OwnsOne(m => m.TaxRate).Property(m => m.Value).HasColumnName("TaxRate"));
     }
 } 

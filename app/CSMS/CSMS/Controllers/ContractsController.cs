@@ -47,7 +47,7 @@ namespace CSMS.Controllers
         {
             await _contractService.Add(contract);
 
-            return contract.CustomerId;
+            return contract.ContractId;
         }
     }
 }

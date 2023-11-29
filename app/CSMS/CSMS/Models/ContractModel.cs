@@ -18,7 +18,9 @@ namespace CSMS.Models
 
         public Guid? CustomerId { get; private set; }
 
-        public MoneyModel Money { get; private set; }
+        public AmountExcludingTax Money { get; private set; }
+        public AmountIncludingTax TaxMoney { get; private set; }
+        public TaxRate TaxRate { get; private set; }
 
         //public MoneyModel TaxMoney { get; private set; }
 
@@ -31,7 +33,9 @@ namespace CSMS.Models
             string contractName,
             string contractCode,
             Guid customerId,
-            MoneyModel money
+            AmountExcludingTax money,
+            AmountIncludingTax taxMoney,
+            TaxRate taxRate
         )
         {
             this.ContractId = contractId;
@@ -39,19 +43,25 @@ namespace CSMS.Models
             this.ContractCode = contractCode;
             this.CustomerId = customerId;
             this.Money = money;
+            this.TaxMoney = taxMoney;
+            this.TaxRate = taxRate;
         }
 
         public ContractModel(
             string contractName,
             string contractCode,
             Guid customerId,
-            MoneyModel money
+            AmountExcludingTax money,
+            AmountIncludingTax taxMoney,
+            TaxRate taxRate
         )
         {
             this.ContractName = contractName;
             this.ContractCode = contractCode;
             this.CustomerId = customerId;
             this.Money = money;
+            this.TaxMoney = taxMoney;
+            this.TaxRate = taxRate;
         }
     }
 }

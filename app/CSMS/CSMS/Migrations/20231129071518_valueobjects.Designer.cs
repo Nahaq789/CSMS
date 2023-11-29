@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CSMS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231129071518_valueobjects")]
+    partial class valueobjects
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -88,47 +91,7 @@ namespace CSMS.Migrations
                                 .HasForeignKey("ContractModelContractId");
                         });
 
-                    b.OwnsOne("CSMS.Models.ValueObject.AmountIncludingTax", "TaxMoney", b1 =>
-                        {
-                            b1.Property<Guid>("ContractModelContractId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<decimal>("Value")
-                                .HasColumnType("numeric")
-                                .HasColumnName("TaxMoney");
-
-                            b1.HasKey("ContractModelContractId");
-
-                            b1.ToTable("Contracts");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ContractModelContractId");
-                        });
-
-                    b.OwnsOne("CSMS.Models.ValueObject.TaxRate", "TaxRate", b1 =>
-                        {
-                            b1.Property<Guid>("ContractModelContractId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<decimal>("Value")
-                                .HasColumnType("numeric")
-                                .HasColumnName("TaxRate");
-
-                            b1.HasKey("ContractModelContractId");
-
-                            b1.ToTable("Contracts");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ContractModelContractId");
-                        });
-
                     b.Navigation("Money")
-                        .IsRequired();
-
-                    b.Navigation("TaxMoney")
-                        .IsRequired();
-
-                    b.Navigation("TaxRate")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

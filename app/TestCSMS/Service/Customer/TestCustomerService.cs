@@ -5,14 +5,14 @@ using NuGet.ContentModel;
 using TestCSMS;
 using static CSMS.GlobalEnum.GlobalEnum;
 
-namespace CSMS.Test.Customers
+namespace TestCSMS.Service.Customer
 {
     public class TestCustomerService : IClassFixture<TestDatabaseFixture>
     {
         private ApplicationDbContext _context { get; set; }
         public TestCustomerService(ApplicationDbContext context)
         {
-            this._context = context;
+            _context = context;
         }
 
         [Fact]
@@ -73,7 +73,7 @@ namespace CSMS.Test.Customers
                     "after@email.com",
                     88
                 );
-            
+
             await reader.Update(AfterCustomer);
             var select = await reader.GetByID(beforeCustomer.CustomerId);
             Assert.NotEqual(beforeCustomer.Name, select.Name);
