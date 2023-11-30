@@ -8,6 +8,6 @@ namespace CSMS.DomainService.Interface
         public Task<IEnumerable<T>> GetAll();
         public Task<Guid> Add(T TEntity);
         public Task<DeleteResult> Delete(T TEntity);
-        //public Task<UpdateResult> Update(T entity);
+        public Task<UpdateResult> Update(T entity);
     }
 }

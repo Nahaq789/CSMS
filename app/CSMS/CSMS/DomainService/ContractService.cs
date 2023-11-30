@@ -76,7 +76,7 @@ namespace CSMS.DomainService
             try
             {
                 await _context.Contracts.AddAsync(contract);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return contract.ContractId;
             }
             catch (Exception ex)

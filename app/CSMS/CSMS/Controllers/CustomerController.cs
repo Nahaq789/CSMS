@@ -10,7 +10,7 @@ namespace CSMS.Controllers
     [Route("api/[controller]")]
     public class CustomerController : ControllerBase
     {
-        private ICustomerService<CustomerModel> _customerService;
+        private readonly ICustomerService<CustomerModel> _customerService;
 
         public CustomerController(ICustomerService<CustomerModel> customerService)
         {
@@ -32,7 +32,7 @@ namespace CSMS.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<CustomerModel> GetByID(Guid id) 
+        public async Task<CustomerModel> GetById(Guid id) 
         {
             try
             {
@@ -50,6 +50,35 @@ namespace CSMS.Controllers
             await _customerService.Add(customer);
 
             return customer.CustomerId;
+        }
+
+        [HttpPut]
+        public async Task<GlobalEnum.GlobalEnum.UpdateResult> Update([FromBody] CustomerModel customer)
+        {
+            try
+            {
+                await _customerService.Add(customer);
+
+                return GlobalEnum.GlobalEnum.UpdateResult.Success;
+            }
+            catch (Exception ex)
+            {
+                return GlobalEnum.GlobalEnum.UpdateResult.Failed;
+            }
+        }
+
+        [HttpDelete]
+        public async Task<GlobalEnum.GlobalEnum.DeleteResult> Delete([FromBody] CustomerModel customer)
+        {
+            try
+            {
+                await _customerService.Delete(customer);
+                return GlobalEnum.GlobalEnum.DeleteResult.Success;
+            }
+            catch (Exception ex)
+            {
+                return GlobalEnum.GlobalEnum.DeleteResult.Failed;
+            }
         }
     }
 }

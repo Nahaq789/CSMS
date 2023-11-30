@@ -7,7 +7,7 @@ namespace CSMS.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ContractsController
+    public class ContractsController : ControllerBase
     {
         private readonly IContractService<ContractModel> _contractService;
 
@@ -30,7 +30,7 @@ namespace CSMS.Controllers
             }
         }
         [HttpGet("{id}")]
-        public async Task<ContractModel> GetByID(Guid id)
+        public async Task<ContractModel> GetById(Guid id)
         {
             try
             {
@@ -48,6 +48,20 @@ namespace CSMS.Controllers
             await _contractService.Add(contract);
 
             return contract.ContractId;
+        }
+
+        [HttpPut]
+        public async Task<GlobalEnum.GlobalEnum.UpdateResult> Update(ContractModel contract)
+        {
+            try
+            {
+                await _contractService.Update(contract);
+                return GlobalEnum.GlobalEnum.UpdateResult.Success;
+            }
+            catch (Exception ex)
+            {
+                return GlobalEnum.GlobalEnum.UpdateResult.Failed;
+            }
         }
     }
 }

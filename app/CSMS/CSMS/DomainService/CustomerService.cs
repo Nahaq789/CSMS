@@ -80,7 +80,7 @@ namespace CSMS.DomainService
             try
             {
                 await _context.AddAsync(customer);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return customer.CustomerId;
             }
             catch (Exception ex)
