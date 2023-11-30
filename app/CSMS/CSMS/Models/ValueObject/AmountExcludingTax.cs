@@ -12,7 +12,7 @@ namespace CSMS.Models.ValueObject
         private AmountExcludingTax() { }
         public AmountExcludingTax(decimal money) 
         {
-            if (IsValid(money)) throw new ArgumentOutOfRangeException();
+            if (!IsValid(money)) throw new ArgumentOutOfRangeException();
             Money = money;
         }
 

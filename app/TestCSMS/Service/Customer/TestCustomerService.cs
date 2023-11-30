@@ -1,5 +1,6 @@
 ﻿using CSMS.Controllers;
 using CSMS.DomainService;
+using CSMS.DomainService.Interface;
 using CSMS.Models;
 using NuGet.ContentModel;
 using TestCSMS;
@@ -54,6 +55,7 @@ namespace TestCSMS.Service.Customer
             var result = await reader.Add(customer);
 
             Assert.Equal(customer.CustomerId, result);
+            Assert.IsAssignableFrom<ICustomerService<CustomerModel>>(reader);
         }
 
         [Fact]

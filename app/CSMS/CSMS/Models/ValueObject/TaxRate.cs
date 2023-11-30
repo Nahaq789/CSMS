@@ -10,7 +10,7 @@ namespace CSMS.Models.ValueObject
         public TaxRate() { }
         public TaxRate(decimal rate) 
         {
-            if(IsValid(rate))
+            if(!IsValid(rate))
             {
                 throw new ArgumentException();
             }

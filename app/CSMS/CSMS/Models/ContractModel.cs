@@ -16,7 +16,7 @@ namespace CSMS.Models
         [Required, NotNull, StringLength(50)]
         public string ContractCode { get; private set; }
 
-        public Guid? CustomerId { get; private set; }
+        public Guid CustomerId { get; private set; }
 
         public AmountExcludingTax Money { get; private set; }
         public AmountIncludingTax TaxMoney { get; private set; }

@@ -10,7 +10,7 @@ namespace CSMS.Models.ValueObject
         public AmountIncludingTax() { }
         public AmountIncludingTax(AmountExcludingTax amountExcludingTax, TaxRate taxRate)
         {
-            TaxMoney = amountExcludingTax.Value * taxRate.Value;
+            TaxMoney = amountExcludingTax.Value * (1 + (taxRate.Value / 100));
         }
     }
 }

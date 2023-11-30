@@ -1,6 +1,5 @@
 ﻿using CSMS.DomainService.Interface;
 using CSMS.Models;
-using System.Data.Entity;
 using static CSMS.GlobalEnum.GlobalEnum;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,11 +24,7 @@ namespace CSMS.DomainService
             }
             try
             {
-                var result = await _context.Contracts.FindAsync(id);
-                if(result == null)
-                {
-                    throw new Exception();
-                }
+                var result = await _context.Contracts.FindAsync(id) ?? throw new NullReferenceException();
                 return result;
             }
             catch (Exception ex)
@@ -39,6 +34,10 @@ namespace CSMS.DomainService
                     await transaction.RollbackToSavepointAsync("GetByID");
                     System.Diagnostics.Debug.WriteLine(ex.Message);
                     throw;
+                }
+                if(ex.Message == "Object reference not set to an instance of an object.")
+                {
+                    throw new NullReferenceException();
                 }
                 throw new Exception();
             }
@@ -91,42 +90,45 @@ namespace CSMS.DomainService
                 throw new Exception();
             }
         }
-        //public async Task<UpdateResult> Update(ContractModel contract)
-        //{
-        //    var transaction = _context.Database.CurrentTransaction;
-        //    if (transaction != null)
-        //    {
-        //        await transaction.CreateSavepointAsync("Update");
-        //    }
-        //    try
-        //    {
-        //        var target = await _context.Contracts.FirstOrDefaultAsync(x => x.ContractId == contract.ContractId);
-        //        if(target == null) { throw new Exception(); }
-        //        ContractModel contractModel = new ContractModel(
-        //                contract.ContractId,
-        //                contract.ContractName,
-        //                contract.ContractCode,
-        //                contract.CustomerId
-        //            );
+        public async Task<UpdateResult> Update(ContractModel contract)
+        {
+            var transaction = _context.Database.CurrentTransaction;
+            if (transaction != null)
+            {
+                await transaction.CreateSavepointAsync("Update");
+            }
+            try
+            {
+                var target = await _context.Contracts.FirstOrDefaultAsync(x => x.ContractId == contract.ContractId);
+                if (target == null) { throw new Exception(); }
+                ContractModel contractModel = new ContractModel(
+                        contract.ContractId,
+                        contract.ContractName,
+                        contract.ContractCode,
+                        contract.CustomerId,
+                        contract.Money,
+                        contract.TaxMoney,
+                        contract.TaxRate
+                    );
 
-        //        _context.Contracts.Entry(target).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
-        //        _context.Contracts.Attach(contractModel);
-        //        _context.Contracts.Update(contractModel);
-        //        await _context.SaveChangesAsync();
+                _context.Contracts.Entry(target).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
+                _context.Contracts.Attach(contractModel);
+                _context.Contracts.Update(contractModel);
+                await _context.SaveChangesAsync();
 
-        //        return UpdateResult.Success;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        if (transaction != null)
-        //        {
-        //            await transaction.RollbackToSavepointAsync("Update");
-        //            System.Diagnostics.Debug.WriteLine(ex.Message);
-        //            throw;
-        //        }
-        //        return UpdateResult.Failed;
-        //    }
-        //}
+                return UpdateResult.Success;
+            }
+            catch (Exception ex)
+            {
+                if (transaction != null)
+                {
+                    await transaction.RollbackToSavepointAsync("Update");
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    throw;
+                }
+                return UpdateResult.Failed;
+            }
+        }
         public async Task<DeleteResult> Delete(ContractModel contractModel)
         {
             var transaction = _context.Database.CurrentTransaction;
