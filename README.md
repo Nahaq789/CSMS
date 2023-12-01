@@ -1,1 +1,3 @@
-# CSMS
+efでマイグレーションをするときは接続先をlocalhostに変更する
+
+通常時はhost.docker.internal:5432
