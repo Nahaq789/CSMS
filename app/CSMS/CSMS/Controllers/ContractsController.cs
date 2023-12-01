@@ -43,11 +43,12 @@ namespace CSMS.Controllers
             }
         }
         [HttpPost]
-        public async Task<Guid> Add([FromBody] ContractModel contract)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> PostAsync([FromBody] ContractModel contract)
         {
             await _contractService.Add(contract);
-
-            return contract.ContractId;
+            return Ok(contract);
         }
 
         [HttpPut]
@@ -61,6 +62,19 @@ namespace CSMS.Controllers
             catch (Exception ex)
             {
                 return GlobalEnum.GlobalEnum.UpdateResult.Failed;
+            }
+        }
+        [HttpDelete]
+        public async Task<GlobalEnum.GlobalEnum.DeleteResult> Delete(ContractModel contract)
+        {
+            try
+            {
+                await _contractService.Delete(contract);
+                return GlobalEnum.GlobalEnum.DeleteResult.Success;
+            }
+            catch(Exception ex)
+            {
+                return GlobalEnum.GlobalEnum.DeleteResult.Failed;
             }
         }
     }

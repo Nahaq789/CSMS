@@ -1,7 +1,12 @@
 ﻿using CSMS.Models.ValueObject;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
+using JsonConstructorAttribute = System.Text.Json.Serialization.JsonConstructorAttribute;
 
 namespace CSMS.Models
 {
@@ -9,25 +14,17 @@ namespace CSMS.Models
     {
         [Key]
         public Guid ContractId { get; private set; }
-
         [Required, NotNull, StringLength(50)]
         public string ContractName { get; private set; }
-
         [Required, NotNull, StringLength(50)]
         public string ContractCode { get; private set; }
-
         public Guid CustomerId { get; private set; }
-
         public AmountExcludingTax Money { get; private set; }
         public AmountIncludingTax TaxMoney { get; private set; }
         public TaxRate TaxRate { get; private set; }
 
-        //public MoneyModel TaxMoney { get; private set; }
-
-        private ContractModel()
-        {
-        }
-
+        public ContractModel() { }
+        [JsonConstructor]
         public ContractModel(
             Guid contractId,
             string contractName,
@@ -46,22 +43,21 @@ namespace CSMS.Models
             this.TaxMoney = taxMoney;
             this.TaxRate = taxRate;
         }
-
-        public ContractModel(
-            string contractName,
-            string contractCode,
-            Guid customerId,
-            AmountExcludingTax money,
-            AmountIncludingTax taxMoney,
-            TaxRate taxRate
-        )
-        {
-            this.ContractName = contractName;
-            this.ContractCode = contractCode;
-            this.CustomerId = customerId;
-            this.Money = money;
-            this.TaxMoney = taxMoney;
-            this.TaxRate = taxRate;
-        }
+        //public ContractModel(
+        //    string contractName,
+        //    string contractCode,
+        //    Guid customerId,
+        //    AmountExcludingTax money,
+        //    AmountIncludingTax taxMoney,
+        //    TaxRate taxRate
+        //)
+        //{
+        //    this.ContractName = contractName;
+        //    this.ContractCode = contractCode;
+        //    this.CustomerId = customerId;
+        //    this.Money = money;
+        //    this.TaxMoney = taxMoney;
+        //    this.TaxRate = taxRate;
+        //}
     }
 }

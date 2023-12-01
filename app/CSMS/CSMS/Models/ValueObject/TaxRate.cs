@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace CSMS.Models.ValueObject
 {
@@ -8,6 +11,7 @@ namespace CSMS.Models.ValueObject
         private readonly decimal Rate;
         public decimal Value { get { return Rate; } private set { } }
         public TaxRate() { }
+        
         public TaxRate(decimal rate) 
         {
             if(!IsValid(rate))
