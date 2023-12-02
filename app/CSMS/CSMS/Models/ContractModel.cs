@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
@@ -19,9 +20,12 @@ namespace CSMS.Models
         [Required, NotNull, StringLength(50)]
         public string ContractCode { get; private set; }
         public Guid CustomerId { get; private set; }
-        public AmountExcludingTax Money { get; private set; }
-        public AmountIncludingTax TaxMoney { get; private set; }
-        public TaxRate TaxRate { get; private set; }
+        public AmountExcludingTax Money { get; }
+        public AmountIncludingTax TaxMoney { get; }
+        public TaxRate TaxRate { get; }
+        [NotMapped]
+        // [JsonPropertyName("Money")]
+        public decimal _Money { get; private set; }
 
         public ContractModel() { }
         [JsonConstructor]
@@ -30,18 +34,17 @@ namespace CSMS.Models
             string contractName,
             string contractCode,
             Guid customerId,
-            AmountExcludingTax money,
-            AmountIncludingTax taxMoney,
-            TaxRate taxRate
+            decimal _money
         )
         {
             this.ContractId = contractId;
             this.ContractName = contractName;
             this.ContractCode = contractCode;
             this.CustomerId = customerId;
-            this.Money = money;
-            this.TaxMoney = taxMoney;
-            this.TaxRate = taxRate;
+            this._Money = _money;
+            this.Money = new AmountExcludingTax(_money);
+            this.TaxRate = new TaxRate(10);
+            this.TaxMoney = new AmountIncludingTax(Money, TaxRate);
         }
         //public ContractModel(
         //    string contractName,

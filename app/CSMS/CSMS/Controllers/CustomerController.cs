@@ -45,39 +45,63 @@ namespace CSMS.Controllers
             }
         }
         [HttpPost]
-        public async Task<Guid> Add([FromBody] CustomerModel customer)
-        {
-            await _customerService.Add(customer);
-
-            return customer.CustomerId;
-        }
-
-        [HttpPut]
-        public async Task<GlobalEnum.GlobalEnum.UpdateResult> Update([FromBody] CustomerModel customer)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Add([FromBody] CustomerModel customer)
         {
             try
             {
-                await _customerService.Add(customer);
-
-                return GlobalEnum.GlobalEnum.UpdateResult.Success;
+                if (ModelState.IsValid)
+                {
+                    await _customerService.Add(customer);
+                    return Ok(customer);
+                }
+                else
+                {
+                    return BadRequest("Failed to create customer");
+                }
             }
             catch (Exception ex)
             {
-                return GlobalEnum.GlobalEnum.UpdateResult.Failed;
+                var result =
+                    $"It was not possible to create a new customer, please try later on ({ex.GetType().Name} - {ex.Message})";
+                return BadRequest(result);
             }
         }
 
-        [HttpDelete]
-        public async Task<GlobalEnum.GlobalEnum.DeleteResult> Delete([FromBody] CustomerModel customer)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update([FromBody] CustomerModel customer)
         {
             try
             {
-                await _customerService.Delete(customer);
-                return GlobalEnum.GlobalEnum.DeleteResult.Success;
+                var result = await _customerService.Update(customer);
+                return result == GlobalEnum.GlobalEnum.UpdateResult.Success
+                    ? Ok(customer)
+                    : BadRequest("Failed to update customer");
             }
             catch (Exception ex)
             {
-                return GlobalEnum.GlobalEnum.DeleteResult.Failed;
+                var result =
+                    $"It was not possible to update a new customer, please try later on ({ex.GetType().Name} - {ex.Message})";
+                return BadRequest(result);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromBody] CustomerModel customer)
+        {
+            try
+            {
+                var result = await _customerService.Delete(customer);
+                return result == GlobalEnum.GlobalEnum.DeleteResult.Success
+                    ? Ok(customer)
+                    : BadRequest("Failed to delete customer");
+            }
+            catch (Exception ex)
+            {
+                var result =
+                    $"It was not possible to delete a new order, please try later on ({ex.GetType().Name} - {ex.Message})";
+                return BadRequest(result);
             }
         }
     }

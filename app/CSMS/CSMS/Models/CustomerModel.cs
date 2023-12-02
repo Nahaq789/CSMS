@@ -3,6 +3,7 @@ using CSMS.Repository;
 using NuGet.Protocol.Core.Types;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace CSMS.Models
 {
@@ -16,6 +17,7 @@ namespace CSMS.Models
         public string Email { get; private set; }
         [Required]
         public int Age { get; private set; }
+        [JsonConstructor]
         public CustomerModel(Guid customerID, string name, string email, int age) 
         {
             this.CustomerId = customerID;

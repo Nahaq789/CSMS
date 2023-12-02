@@ -33,9 +33,7 @@ namespace TestCSMS.Service.Contract
                     "naha house",
                     "000789",
                     Guid.Empty,
-                    amountExcludingTax,
-                    new AmountIncludingTax(amountExcludingTax, taxRate),
-                    taxRate
+                    10000
                 );
             await reader.Add(contract);
             var result = await reader.GetByID(contract.ContractId);
@@ -56,9 +54,7 @@ namespace TestCSMS.Service.Contract
                     "naha house2",
                     "111789",
                     Guid.Empty,
-                    amountExcludingTax,
-                    new AmountIncludingTax(amountExcludingTax, taxRate),
-                    taxRate
+                    10000
                 );
 
             await reader.Add(contract);
@@ -79,9 +75,7 @@ namespace TestCSMS.Service.Contract
                     "naha house3",
                     "785789",
                     Guid.Empty,
-                    amountExcludingTax,
-                    new AmountIncludingTax(amountExcludingTax, taxRate),
-                    taxRate
+                    10000
                 );
 
             await reader.Add(contract);
@@ -107,9 +101,7 @@ namespace TestCSMS.Service.Contract
                     "before",
                     "111111",
                     Guid.Empty,
-                    amountExcludingTax,
-                    new AmountIncludingTax(amountExcludingTax, taxRate),
-            taxRate
+                    10000
                 );
             await reader.Add(beforeContract);
             ContractModel afterContract = new ContractModel(
@@ -117,9 +109,7 @@ namespace TestCSMS.Service.Contract
                     "after",
                     "333333",
                     Guid.Empty,
-                    amountExcludingTax,
-                    new AmountIncludingTax(new AmountExcludingTax(880m), taxRate),
-                    taxRate
+                    10000
                 );
             await reader.Update(afterContract);
 
@@ -145,9 +135,7 @@ namespace TestCSMS.Service.Contract
                     "delete",
                     "788789",
                     Guid.Empty,
-                    amountExcludingTax,
-                    new AmountIncludingTax(amountExcludingTax, taxRate),
-                    taxRate
+                    10000
                 );
 
             await reader.Add(contract);

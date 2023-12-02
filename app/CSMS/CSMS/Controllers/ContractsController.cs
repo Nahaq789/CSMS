@@ -2,6 +2,7 @@
 using CSMS.DomainService.Interface;
 using CSMS.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace CSMS.Controllers
 {
@@ -47,34 +48,62 @@ namespace CSMS.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> PostAsync([FromBody] ContractModel contract)
         {
-            await _contractService.Add(contract);
-            return Ok(contract);
-        }
-
-        [HttpPut]
-        public async Task<GlobalEnum.GlobalEnum.UpdateResult> Update(ContractModel contract)
-        {
             try
             {
-                await _contractService.Update(contract);
-                return GlobalEnum.GlobalEnum.UpdateResult.Success;
+                if (ModelState.IsValid)
+                {
+                    await _contractService.Add(contract);
+                    return Ok(contract);
+                }
+                else
+                {
+                    return BadRequest("Failed to create contract");
+                }
             }
             catch (Exception ex)
             {
-                return GlobalEnum.GlobalEnum.UpdateResult.Failed;
+                var result =
+                    $"It was not possible to create a new order, please try later on ({ex.GetType().Name} - {ex.Message})";
+                return BadRequest(result);
             }
+            
         }
-        [HttpDelete]
-        public async Task<GlobalEnum.GlobalEnum.DeleteResult> Delete(ContractModel contract)
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateAsync([FromBody] ContractModel contract)
         {
             try
             {
-                await _contractService.Delete(contract);
-                return GlobalEnum.GlobalEnum.DeleteResult.Success;
+                var result = await _contractService.Update(contract);
+                return result == GlobalEnum.GlobalEnum.UpdateResult.Success
+                    ? Ok(contract)
+                    : BadRequest("Failed to update contract");
+
+            }
+            catch (Exception ex)
+            {
+                var result =
+                    $"It was not possible to update a new order, please try later on ({ex.GetType().Name} - {ex.Message})";
+                return BadRequest(result);
+            }
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(ContractModel contract)
+        {
+            try
+            {
+                var result = await _contractService.Delete(contract);
+                return result == GlobalEnum.GlobalEnum.DeleteResult.Success
+                    ? Ok(contract)
+                    : BadRequest("Failed to delete contract");
             }
             catch(Exception ex)
             {
-                return GlobalEnum.GlobalEnum.DeleteResult.Failed;
+                var result =
+                    $"It was not possible to delete a new order, please try later on ({ex.GetType().Name} - {ex.Message})";
+                return BadRequest(result);
             }
         }
     }

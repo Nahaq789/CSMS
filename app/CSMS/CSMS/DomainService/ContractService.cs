@@ -106,9 +106,7 @@ namespace CSMS.DomainService
                         contract.ContractName,
                         contract.ContractCode,
                         contract.CustomerId,
-                        contract.Money,
-                        contract.TaxMoney,
-                        contract.TaxRate
+                        contract._Money
                     );
 
                 _context.Contracts.Entry(target).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
