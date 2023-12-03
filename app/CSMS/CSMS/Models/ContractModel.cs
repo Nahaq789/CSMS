@@ -43,7 +43,7 @@ namespace CSMS.Models
             this.CustomerId = customerId;
             this._Money = _money;
             this.Money = new AmountExcludingTax(_money);
-            this.TaxRate = new TaxRate(10);
+            this.TaxRate = new TaxRate();
             this.TaxMoney = new AmountIncludingTax(Money, TaxRate);
         }
         //public ContractModel(

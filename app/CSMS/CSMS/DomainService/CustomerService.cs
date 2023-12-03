@@ -44,7 +44,6 @@ namespace CSMS.DomainService
                 }
                 throw new Exception();
             }
-            
         }
         public async Task<IEnumerable<CustomerModel>> GetAll()
         {

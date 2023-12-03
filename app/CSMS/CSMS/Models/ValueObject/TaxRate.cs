@@ -12,7 +12,7 @@ namespace CSMS.Models.ValueObject
         public decimal Value { get { return Rate; } private set { } }
         public TaxRate() { }
         
-        public TaxRate(decimal rate) 
+        public TaxRate(decimal rate = 10) 
         {
             if(!IsValid(rate))
             {
