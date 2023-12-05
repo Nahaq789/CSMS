@@ -75,7 +75,16 @@ namespace CSMS.DomainService
             }
             try
             {
-                await _context.Contracts.AddAsync(contract);
+                var newContract = new ContractModel(
+                    contract.ContractId,
+                    contract.ContractName,
+                    contract.ContractCode,
+                    contract.CustomerId,
+                    contract._Money,
+                    contract._TaxRate
+                    
+                );
+                await _context.Contracts.AddAsync(newContract);
                 await _context.SaveChangesAsync();
                 return contract.ContractId;
             }
@@ -101,12 +110,14 @@ namespace CSMS.DomainService
             {
                 var target = await _context.Contracts.FirstOrDefaultAsync(x => x.ContractId == contract.ContractId);
                 if (target == null) { throw new Exception(); }
+
                 ContractModel contractModel = new ContractModel(
-                        contract.ContractId,
-                        contract.ContractName,
-                        contract.ContractCode,
-                        contract.CustomerId,
-                        contract._Money
+                    contract.ContractId,
+                    contract.ContractName,
+                    contract.ContractCode,
+                    contract.CustomerId,
+                    contract._Money,
+                    contract._TaxRate
                     );
 
                 _context.Contracts.Entry(target).State = Microsoft.EntityFrameworkCore.EntityState.Detached;

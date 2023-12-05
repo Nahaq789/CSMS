@@ -33,7 +33,8 @@ namespace TestCSMS.Service.Contract
                     "naha house",
                     "000789",
                     Guid.Empty,
-                    10000
+                    10000,
+                    10
                 );
             await reader.Add(contract);
             var result = await reader.GetByID(contract.ContractId);
@@ -54,7 +55,8 @@ namespace TestCSMS.Service.Contract
                     "naha house2",
                     "111789",
                     Guid.Empty,
-                    10000
+                    10000,
+                    10
                 );
 
             await reader.Add(contract);
@@ -75,7 +77,8 @@ namespace TestCSMS.Service.Contract
                     "naha house3",
                     "785789",
                     Guid.Empty,
-                    10000
+                    10000,
+                    10
                 );
 
             await reader.Add(contract);
@@ -85,7 +88,6 @@ namespace TestCSMS.Service.Contract
             Assert.NotNull(result);
             Assert.Equal(result.ContractId, contract.ContractId );
             Assert.IsType<AmountExcludingTax>(result.Money);
-            Assert.IsType<AmountIncludingTax>(result.TaxMoney);
             Assert.IsType<TaxRate>(result.TaxRate);
         }
         [Fact]
@@ -101,7 +103,8 @@ namespace TestCSMS.Service.Contract
                     "before",
                     "111111",
                     Guid.Empty,
-                    10000
+                    10000,
+                    10
                 );
             await reader.Add(beforeContract);
             ContractModel afterContract = new ContractModel(
@@ -109,7 +112,8 @@ namespace TestCSMS.Service.Contract
                     "after",
                     "333333",
                     Guid.Empty,
-                    10000
+                    10000,
+                    10
                 );
             await reader.Update(afterContract);
 
@@ -118,7 +122,6 @@ namespace TestCSMS.Service.Contract
             Assert.NotEqual(beforeContract.ContractName, afterContract.ContractName);
             Assert.NotEqual(beforeContract.ContractCode, afterContract.ContractCode);
             Assert.IsType<AmountExcludingTax>(afterContract.Money);
-            Assert.IsType<AmountIncludingTax>(afterContract.TaxMoney);
             Assert.IsType<TaxRate>(afterContract.TaxRate);
             Assert.Equal(beforeContract.ContractId, afterContract.ContractId);
         }
@@ -135,7 +138,8 @@ namespace TestCSMS.Service.Contract
                     "delete",
                     "788789",
                     Guid.Empty,
-                    10000
+                    10000,
+                    10
                 );
 
             await reader.Add(contract);

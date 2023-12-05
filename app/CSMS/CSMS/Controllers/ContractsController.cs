@@ -1,5 +1,7 @@
-﻿using CSMS.DomainService;
+﻿using AutoMapper;
+using CSMS.DomainService;
 using CSMS.DomainService.Interface;
+using CSMS.DTO.Contract;
 using CSMS.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -11,10 +13,11 @@ namespace CSMS.Controllers
     public class ContractsController : ControllerBase
     {
         private readonly IContractService<ContractModel> _contractService;
-
-        public ContractsController(IContractService<ContractModel> contractService)
+        private readonly IMapper _mapper;
+        public ContractsController(IContractService<ContractModel> contractService, IMapper mapper)
         {
-            _contractService = contractService;
+            this._contractService = contractService;
+            this._mapper = mapper;
         }
 
         [HttpGet]
@@ -46,13 +49,14 @@ namespace CSMS.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> PostAsync([FromBody] ContractModel contract)
+        public async Task<IActionResult> PostAsync([FromBody] ContractDto contract)
         {
             try
             {
+                var _contract = _mapper.Map<ContractModel>(contract);
                 if (ModelState.IsValid)
                 {
-                    await _contractService.Add(contract);
+                    await _contractService.Add(_contract);
                     return Ok(contract);
                 }
                 else

@@ -10,19 +10,17 @@ namespace CSMS.Models.ValueObject
 {
     public class AmountExcludingTax
     {
-        [NotMapped]
-        private readonly decimal Money;
-        public decimal Value { get { return Money; } private set { } }
+        public decimal Value { get; private set; }
         public AmountExcludingTax() { }
         public AmountExcludingTax(decimal money) 
         {
             if (!IsValid(money)) throw new ArgumentOutOfRangeException();
-            Money = money;
+            Value = money;
         }
 
         public AmountExcludingTax Add(AmountExcludingTax amountExcludingTax)
         {
-            return new AmountExcludingTax(Money + amountExcludingTax.Money);
+            return new AmountExcludingTax(Value + amountExcludingTax.Value);
         }
 
         private static bool IsValid(decimal money)

@@ -1,7 +1,10 @@
-﻿using CSMS.Controllers;
+﻿using AutoMapper;
+using CSMS.Controllers;
 using CSMS.DomainService;
 using CSMS.DomainService.Interface;
+using CSMS.DTO;
 using CSMS.Models;
+using Moq;
 using NuGet.ContentModel;
 using TestCSMS;
 using static CSMS.GlobalEnum.GlobalEnum;
@@ -102,7 +105,16 @@ namespace TestCSMS.Service.Customer
         [Fact]
         public async void GetAllController()
         {
-            var controller = new CustomerController(new CustomerService(_context));
+            var mockMapper = new Mock<IMapper>();
+            mockMapper.Setup(x => x.Map<CustomerModel>(It.IsAny<CustomerDto>()))
+                .Returns((CustomerDto src) => new CustomerModel(
+                        src.CustomerId,
+                        src.Name,
+                        src.Email,
+                        src.Age
+                    ));
+            
+            var controller = new CustomerController(new CustomerService(_context), mockMapper.Object);
 
             var result = await controller.GetAll();
 

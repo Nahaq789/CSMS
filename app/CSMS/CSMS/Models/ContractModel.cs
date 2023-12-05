@@ -21,20 +21,21 @@ namespace CSMS.Models
         public string ContractCode { get; private set; }
         public Guid CustomerId { get; private set; }
         public AmountExcludingTax Money { get; }
-        public AmountIncludingTax TaxMoney { get; }
         public TaxRate TaxRate { get; }
+        
         [NotMapped]
-        // [JsonPropertyName("Money")]
         public decimal _Money { get; private set; }
+        [NotMapped]
+        public decimal _TaxRate { get; private set; }
 
         public ContractModel() { }
-        [JsonConstructor]
         public ContractModel(
             Guid contractId,
             string contractName,
             string contractCode,
             Guid customerId,
-            decimal _money
+            decimal _money,
+            decimal _taxRate
         )
         {
             this.ContractId = contractId;
@@ -42,25 +43,9 @@ namespace CSMS.Models
             this.ContractCode = contractCode;
             this.CustomerId = customerId;
             this._Money = _money;
+            this._TaxRate = _taxRate;
             this.Money = new AmountExcludingTax(_money);
-            this.TaxRate = new TaxRate();
-            this.TaxMoney = new AmountIncludingTax(Money, TaxRate);
+            this.TaxRate = new TaxRate(_taxRate);
         }
-        //public ContractModel(
-        //    string contractName,
-        //    string contractCode,
-        //    Guid customerId,
-        //    AmountExcludingTax money,
-        //    AmountIncludingTax taxMoney,
-        //    TaxRate taxRate
-        //)
-        //{
-        //    this.ContractName = contractName;
-        //    this.ContractCode = contractCode;
-        //    this.CustomerId = customerId;
-        //    this.Money = money;
-        //    this.TaxMoney = taxMoney;
-        //    this.TaxRate = taxRate;
-        //}
     }
 }

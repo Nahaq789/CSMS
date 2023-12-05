@@ -37,7 +37,7 @@ namespace CSMS.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<Guid?>("CustomerId")
+                    b.Property<Guid>("CustomerId")
                         .HasColumnType("uuid");
 
                     b.HasKey("ContractId");
@@ -88,23 +88,6 @@ namespace CSMS.Migrations
                                 .HasForeignKey("ContractModelContractId");
                         });
 
-                    b.OwnsOne("CSMS.Models.ValueObject.AmountIncludingTax", "TaxMoney", b1 =>
-                        {
-                            b1.Property<Guid>("ContractModelContractId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<decimal>("Value")
-                                .HasColumnType("numeric")
-                                .HasColumnName("TaxMoney");
-
-                            b1.HasKey("ContractModelContractId");
-
-                            b1.ToTable("Contracts");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ContractModelContractId");
-                        });
-
                     b.OwnsOne("CSMS.Models.ValueObject.TaxRate", "TaxRate", b1 =>
                         {
                             b1.Property<Guid>("ContractModelContractId")
@@ -123,9 +106,6 @@ namespace CSMS.Migrations
                         });
 
                     b.Navigation("Money")
-                        .IsRequired();
-
-                    b.Navigation("TaxMoney")
                         .IsRequired();
 
                     b.Navigation("TaxRate")

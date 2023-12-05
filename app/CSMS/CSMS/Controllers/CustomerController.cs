@@ -1,6 +1,8 @@
-﻿using CSMS.DomainInterface;
+﻿using AutoMapper;
+using CSMS.DomainInterface;
 using CSMS.DomainService;
 using CSMS.DomainService.Interface;
+using CSMS.DTO;
 using CSMS.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,10 +13,11 @@ namespace CSMS.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerService<CustomerModel> _customerService;
-
-        public CustomerController(ICustomerService<CustomerModel> customerService)
+        private readonly IMapper _mapper;
+        public CustomerController(ICustomerService<CustomerModel> customerService, IMapper mapper)
         {
             this._customerService = customerService;
+            this._mapper = mapper;
         }
 
         [HttpGet]
@@ -47,13 +50,14 @@ namespace CSMS.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Add([FromBody] CustomerModel customer)
+        public async Task<IActionResult> Add([FromBody] CustomerDto customer)
         {
             try
             {
+                var _customer = _mapper.Map<CustomerModel>(customer);
                 if (ModelState.IsValid)
                 {
-                    await _customerService.Add(customer);
+                    await _customerService.Add(_customer);
                     return Ok(customer);
                 }
                 else
