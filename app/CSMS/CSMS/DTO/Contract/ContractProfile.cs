@@ -34,13 +34,13 @@ public class ContractProfile : Profile
                     opt.MapFrom(src => src.CustomerId);
                 }
             )
-            // .ForMember(
-            //     dest => dest._Money,
-            //     opt =>
-            //     {
-            //         opt.MapFrom(src => src.AmountExcludingTax);
-            //     }
-            // )
+            .ForMember(
+                dest => dest._Money,
+                opt =>
+                {
+                    opt.MapFrom(src => src.AmountExcludingTax);
+                }
+            )
             .ForMember(
                 dest => dest._TaxRate,
                 opt =>
