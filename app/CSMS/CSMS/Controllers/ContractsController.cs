@@ -67,10 +67,9 @@ namespace CSMS.Controllers
             catch (Exception ex)
             {
                 var result =
-                    $"It was not possible to create a new order, please try later on ({ex.GetType().Name} - {ex.Message})";
+                    $"It was not possible to create a new contract, please try later on ({ex.GetType().Name} - {ex.Message})";
                 return BadRequest(result);
             }
-            
         }
 
         [HttpPut("{id}")]
@@ -89,7 +88,7 @@ namespace CSMS.Controllers
             catch (Exception ex)
             {
                 var result =
-                    $"It was not possible to update a new order, please try later on ({ex.GetType().Name} - {ex.Message})";
+                    $"It was not possible to update a new contract, please try later on ({ex.GetType().Name} - {ex.Message})";
                 return BadRequest(result);
             }
         }

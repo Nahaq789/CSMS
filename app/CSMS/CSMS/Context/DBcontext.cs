@@ -6,6 +6,7 @@ public class ApplicationDbContext : DbContext
 {
     public DbSet<CustomerModel> Customers { get; set; }
     public DbSet<ContractModel> Contracts { get; set; }
+    public DbSet<TaskModel> Task { get; set; }
 
     public ApplicationDbContext() { }
     public ApplicationDbContext (DbContextOptions<ApplicationDbContext> options) : base(options)

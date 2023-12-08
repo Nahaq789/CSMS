@@ -19,5 +19,6 @@ public class StartupDI
 
         builder.Services.AddScoped<ICustomerService<CustomerModel>, CustomerService>();
         builder.Services.AddScoped<IContractService<ContractModel>, ContractService>();
+        builder.Services.AddScoped<ITaskService<TaskModel>, TaskService>();
     }
 }
