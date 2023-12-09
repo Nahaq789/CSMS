@@ -82,7 +82,7 @@ namespace CSMS.DomainService
                     contract.CustomerId,
                     contract._Money,
                     contract._TaxRate
-                    
+
                 );
                 await _context.Contracts.AddAsync(newContract);
                 await _context.SaveChangesAsync();
@@ -147,6 +147,12 @@ namespace CSMS.DomainService
             }
             try
             {
+                var target = 
+                    await _context.Contracts.FirstOrDefaultAsync(x => x.ContractId == contractModel.ContractId);
+                if (target == null) { throw new Exception(); }
+
+                _context.Contracts.Entry(target).State = EntityState.Detached;
+                _context.Contracts.Attach(contractModel);
                 _context.Contracts.Remove(contractModel);
                 await _context.SaveChangesAsync();
                 return DeleteResult.Success;

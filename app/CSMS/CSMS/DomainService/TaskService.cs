@@ -40,6 +40,10 @@ public class TaskService : IBaseEntityID, ITaskService<TaskModel>
                 System.Diagnostics.Debug.WriteLine(ex.Message);
                 throw;
             }
+            if(ex.Message == "Object reference not set to an instance of an object.")
+            {
+                throw new NullReferenceException();
+            }
             throw new Exception();
         }
     }

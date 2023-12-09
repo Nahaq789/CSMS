@@ -9,6 +9,7 @@ namespace TestCSMS.Service.Task;
 public class TestTaskService : IClassFixture<TestTaskService>
 {
     private ApplicationDbContext _context;
+    private DateTime utcDateTime = DateTime.Now.ToUniversalTime();
 
     public TestTaskService(ApplicationDbContext context)
     {
@@ -23,7 +24,7 @@ public class TestTaskService : IClassFixture<TestTaskService>
             Guid.NewGuid(),
             "tasktest",
             "this is task test",
-            DateTime.Now,
+            utcDateTime,
             Guid.Empty,
             Guid.Empty
         );
@@ -46,11 +47,13 @@ public class TestTaskService : IClassFixture<TestTaskService>
     public async void Add()
     {
         var reader = new TaskService(_context);
+        // タイムゾーン情報を UTC に変換
+
         TaskModel taskModel = new TaskModel(
             Guid.NewGuid(),
             "taskaddtest",
             "this is task test",
-            DateTime.Now,
+            utcDateTime,
             Guid.Empty,
             Guid.Empty
         );
@@ -67,18 +70,18 @@ public class TestTaskService : IClassFixture<TestTaskService>
         var reader = new TaskService(_context);
         TaskModel beforeTaskModel = new TaskModel(
             Guid.NewGuid(),
-            "task before update test",
+            "task before test",
             "this is before task test",
-            DateTime.Now,
+            utcDateTime,
             Guid.Empty,
             Guid.Empty
         );
         await reader.Add(beforeTaskModel);
         TaskModel afterTaskModel = new TaskModel(
-            Guid.NewGuid(),
-            "task after update test",
+            beforeTaskModel.TaskId,
+            "task after test",
             "this is after task test",
-            DateTime.Now,
+            utcDateTime,
             Guid.Empty,
             Guid.Empty
         );
@@ -99,7 +102,7 @@ public class TestTaskService : IClassFixture<TestTaskService>
             Guid.NewGuid(),
             "task delete test",
             "this is delete test",
-            DateTime.Now,
+            utcDateTime,
             Guid.Empty,
             Guid.Empty
         );
