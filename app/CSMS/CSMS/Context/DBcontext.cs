@@ -24,6 +24,7 @@ public class ApplicationDbContext : DbContext
         // テーブルを再構築しないようにする
         modelBuilder.Entity<CustomerModel>().ToTable("Customers");
         modelBuilder.Entity<ContractModel>().ToTable("Contracts");
+        modelBuilder.Entity<TaskModel>().ToTable("Task");
 
         modelBuilder.Entity<ContractModel>(entity => entity.OwnsOne(m => m.Money).Property(m => m.Value).HasColumnName("Money"));
         modelBuilder.Entity<ContractModel>(entity => entity.OwnsOne(m => m.TaxRate).Property(m => m.Value).HasColumnName("TaxRate"));

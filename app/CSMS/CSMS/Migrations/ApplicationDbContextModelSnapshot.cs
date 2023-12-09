@@ -96,7 +96,7 @@ namespace CSMS.Migrations
 
                     b.HasKey("TaskId");
 
-                    b.ToTable("Task");
+                    b.ToTable("Task", (string)null);
                 });
 
             modelBuilder.Entity("CSMS.Models.ContractModel", b =>

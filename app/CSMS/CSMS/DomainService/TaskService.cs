@@ -28,7 +28,7 @@ public class TaskService : IBaseEntityID, ITaskService<TaskModel>
             var result = await _context.Task.FindAsync(id);
             if (result == null)
             {
-                throw new Exception();
+                throw new NullReferenceException();
             }
             return result;
         }
