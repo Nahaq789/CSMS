@@ -8,7 +8,7 @@ const Sidebar = () => {
 
         <ul>
           <li>
-            <NavLink slug={"/"}>
+            <NavLink slug={"/dashboard"}>
               <span>Dashboard</span>
             </NavLink>
           </li>

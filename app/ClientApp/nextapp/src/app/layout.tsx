@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/navigation/Sidebar";
+import React from "react";
+import {NextFont} from "next/dist/compiled/@next/font";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter: NextFont = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,7 +21,7 @@ export default function RootLayout({
     <html lang="en" className={inter.className}>
       <body>
         <div className={"wrapper"}>
-          <Sidebar />
+            <Sidebar />
           <div className={"main-container"}>
             {/* <SearchBar /> */}
             <main>{children}</main>
