@@ -9,7 +9,7 @@ using System.Configuration;
 using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var AllowSpecificOrigins = "_AllowSpecificOrigins";
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -17,6 +17,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: AllowSpecificOrigins,
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000/");
+        });
+});
 
 //DI
 StartupDI.Setup(builder);
@@ -31,6 +40,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(AllowSpecificOrigins);
 
 app.UseAuthorization();
 

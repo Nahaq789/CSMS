@@ -25,3 +25,5 @@ const TaskListContainer: React.FC<TaskProps> = ({ task }): React.JSX.Element => 
         </div>
     )
 }
+
+export default TaskListContainer;
