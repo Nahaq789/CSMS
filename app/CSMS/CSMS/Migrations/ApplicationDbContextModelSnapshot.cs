@@ -101,7 +101,7 @@ namespace CSMS.Migrations
 
             modelBuilder.Entity("CSMS.Models.ContractModel", b =>
                 {
-                    b.OwnsOne("CSMS.Models.ValueObject.AmountExcludingTax", "Money", b1 =>
+                    b.OwnsOne("CSMS.Models.ContractModel.Money#CSMS.Models.ValueObject.AmountExcludingTax", "Money", b1 =>
                         {
                             b1.Property<Guid>("ContractModelContractId")
                                 .HasColumnType("uuid");
@@ -112,13 +112,13 @@ namespace CSMS.Migrations
 
                             b1.HasKey("ContractModelContractId");
 
-                            b1.ToTable("Contracts");
+                            b1.ToTable("Contracts", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("ContractModelContractId");
                         });
 
-                    b.OwnsOne("CSMS.Models.ValueObject.TaxRate", "TaxRate", b1 =>
+                    b.OwnsOne("CSMS.Models.ContractModel.TaxRate#CSMS.Models.ValueObject.TaxRate", "TaxRate", b1 =>
                         {
                             b1.Property<Guid>("ContractModelContractId")
                                 .HasColumnType("uuid");
@@ -129,7 +129,7 @@ namespace CSMS.Migrations
 
                             b1.HasKey("ContractModelContractId");
 
-                            b1.ToTable("Contracts");
+                            b1.ToTable("Contracts", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("ContractModelContractId");
