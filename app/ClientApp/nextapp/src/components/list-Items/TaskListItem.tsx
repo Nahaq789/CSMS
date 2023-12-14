@@ -7,44 +7,33 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import {FC} from "react";
 import {Inter} from "next/font/google";
+import "../../app/globals.css"
 
 
 interface Task {
-    id: string;
-    name: string;
-    content: string;
+    taskId: string;
+    taskName: string;
+    contents: string;
     }
 
 interface TaskProps {
     task: Task
 }
-
-const bull: React.JSX.Element = (
-    <Box
-        component="span"
-        sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
-    >
-        •
-    </Box>
-);
-
 const TaskCard: FC<TaskProps> = ({ task }): React.JSX.Element => {
     return (
-        <Card sx={{ minWidth: 275 }}>
-            <CardContent>
+        <Card className={"card-main-container"}>
+            <CardContent className={"card-content"}>
                 <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                    {task.id}
+                    {task.taskId}
                 </Typography>
                 <Typography variant="h5" component="div">
-                    {task.name}
+                    {task.taskName}
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                    {task.content}
+                    
                 </Typography>
                 <Typography variant="body2">
-                    well meaning and kindly.
-                    <br />
-                    {'"a benevolent smile"'}
+                    {task.contents}
                 </Typography>
             </CardContent>
             <CardActions>

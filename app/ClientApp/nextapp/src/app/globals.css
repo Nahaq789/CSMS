@@ -113,3 +113,11 @@ body {
   background-size: auto auto, auto 100%;
   background-position: right bottom;
 }
+
+.card-main-container {
+  width: 30vh;
+}
+
+.card-content {
+  
+}

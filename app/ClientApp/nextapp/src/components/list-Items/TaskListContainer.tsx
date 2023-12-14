@@ -4,9 +4,9 @@ import {List} from "postcss/lib/list";
 import TaskListItem from "@/components/list-Items/TaskListItem";
 
 interface Task {
-    id: string;
-    name: string;
-    content: string;
+    taskId: string;
+    taskName: string;
+    contents: string;
 }
 
 interface TaskProps {
@@ -18,7 +18,9 @@ const TaskListContainer: React.FC<TaskProps> = ({ task }): React.JSX.Element => 
             <ul>
                 {
                     task.map((task) => 
-                        <TaskListItem task={ task } />
+                        <li key={task.taskId}>
+                            <TaskListItem task={ task } />
+                        </li>
                     )
                 }
             </ul>
