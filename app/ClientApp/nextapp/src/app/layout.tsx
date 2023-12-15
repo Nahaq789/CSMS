@@ -3,7 +3,9 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/navigation/Sidebar";
 import React from "react";
-import {NextFont} from "next/dist/compiled/@next/font";
+import { NextFont } from "next/dist/compiled/@next/font";
+import SearchBar from "@/components/searchbar/SearchBar";
+import TopBar from "@/components/topbar/TopBar";
 
 const inter: NextFont = Inter({ subsets: ["latin"] });
 
@@ -21,11 +23,11 @@ export default function RootLayout({
     <html lang="en" className={inter.className}>
       <body>
         <div className={"wrapper"}>
-            <Sidebar />
-          <div className={"main-container"}>
-            {/* <SearchBar /> */}
+          {/* <Sidebar /> */}
+          <TopBar />
+          {/* <div className={"main-container"}>
             <main>{children}</main>
-          </div>
+          </div> */}
         </div>
       </body>
     </html>

@@ -4,6 +4,8 @@
   --color-text-gray: rgba(255, 255, 255, 0.5);
   --color-pink: rgb(205, 25, 179);
   --color-scrollbar-thumb: rgba(255, 255, 255, 0.2);
+  --color-grey: rgba(50, 50, 50, 0.5);
+  --color-black: rgb(0, 0, 0);
 }
 * {
   margin: 0;
@@ -15,35 +17,69 @@
 }
 body {
   height: 100vh;
-  background: #1c3344;
-  padding: 2%;
+  background: #3a5971;
+  width: 100%;
+  /* padding: 2%; */
 }
 .wrapper {
-  --vertical-padding: 2.5em;
+  --vertical-padding: 1.5em;
   display: grid;
   height: 100%;
-  grid-template-areas:
-  "sidebar main main"
-  "sidebar main main" 
-  "player player player";
-  grid-template-columns: auto 1fr 1fr;
+  /* grid-template-areas:
+    "sidebar main main"
+    "sidebar main main"
+    "player player player";
+  grid-template-columns: auto 1fr 1fr; */
 }
+.top-bar {
+  height: 7vh;
+  width: 100vw;
+  background: var(--color-grey);
+  position: fixed;
+  z-index: 10;
+}
+.top-bar ul {
+  position: relative;
+  display: -webkit-flex;
+  display: flex;
+  align-items: center;
+}
+.top-bar li {
+  /* position: absolute; */
+  /* line-height: 100%; */
+  align-items: center;
+}
+.top-bar .app-name {
+  font-size: 1.5em;
+  font-weight: 500;
+  color: var(--color-text-light);
+  /* margin: 0vh 0vh 2vw 2.7vw; */
+  /* line-height: 7vh; */
+  /* display: inline-block; */
+}
+.top-bar .search-bar {
+  /* width: 10vw; */
+  left: 30%;
+  height: auto;
+}
+
 .sidebar {
   height: 93vh;
-  width: 33vh;
-  --padding-left: 1.7em;
+  width: 15vw;
+  margin-top: 7vh;
+  --padding-left: 3.5em;
   display: flex;
   padding: var(--vertical-padding) 0;
   padding-right: 2.25vw;
   flex-direction: column;
   justify-content: space-between;
   grid-area: sidebar;
-  border-radius: 10px;
-  background: rgba(39, 39, 39, 0.5);
+  background: var(--color-grey);
   backdrop-filter: blur(30px);
+  position: fixed;
 }
 .sidebar > *:not(div),
-.sidebar div > *:not(ul){
+.sidebar div > *:not(ul) {
   padding-left: var(--padding-left);
 }
 
@@ -52,7 +88,7 @@ body {
   background: none;
 }
 
-.sidebar .app-logo > svg{
+.sidebar .app-logo > svg {
   padding: 0.2em;
   color: #fff;
   font-size: 2.5em;
@@ -72,14 +108,18 @@ body {
 
 .sidebar a {
   display: flex;
-  padding: 1em 0 1em var(--padding-left);
+  padding: 2vh 2vh 2vw 2.7vw;
   align-items: center;
   gap: 1ch;
   /* workaround for animated background images as they are currently not supported yet (May 2023) */
-  background: linear-gradient(90deg, rgba(205, 25, 179, 0.25) 0%, rgba(205, 25, 179, 0) 50%);
+  background: linear-gradient(
+    90deg,
+    rgba(205, 25, 179, 0.25) 0%,
+    rgba(205, 25, 179, 0) 50%
+  );
   background-position-x: -50px;
   background-repeat: no-repeat;
-  transition: background-position .4s ease-in-out;
+  transition: background-position 0.4s ease-in-out;
 }
 
 .sidebar a.active,
@@ -91,15 +131,16 @@ body {
 .sidebar a:hover:not(.app-logo) > svg {
   color: var(--color-pink);
 }
-.sidebar h2 {
+.sidebar h1 {
   margin-bottom: 1.4em;
   font-size: 1em;
   font-weight: 500;
-  color: var(--color-pink);
+  color: var(--color-text-light);
 }
 
 .main-container {
   --horizontal-padding: 2.8em;
+  height: 93vh;
   display: grid;
   grid-area: main;
   padding: var(--vertical-padding) var(--horizontal-padding);
@@ -107,17 +148,33 @@ body {
     "searchbar . ."
     "main-container main-container main-container";
   grid-template-columns: minmax(0, 1fr);
-  border-bottom-right-radius: 2em;
+  border-radius: 10px;
+  /* background: rgba(39, 39, 39, 0.5);
+  border-bottom-right-radius: 2em; */
   /*background: aquamarine;*/
   background-repeat: no-repeat;
   background-size: auto auto, auto 100%;
   background-position: right bottom;
 }
 
+.card-div {
+  position: relative;
+}
+
 .card-main-container {
-  width: 30vh;
+  width: 25vh;
+  display: inline-block;
 }
 
 .card-content {
-  
+  position: relative;
+}
+
+.task-list-container {
+  display: flex;
+  position: relative;
+}
+
+.home-container {
+  display: inline-block;
 }
