@@ -1,0 +1,55 @@
+.container {
+    background-color: var(--color-grey);
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    gap: 20px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.container:hover {
+    background-color: #2d2e37;
+}
+
+.text {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.number {
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.detail {
+    font-size: 14px;
+    font-weight: 300;
+}
+
+.positive {
+    color: lime;
+}
+
+.negative {
+    color: red;
+}
+
+.ul {
+    display: flex;
+    gap: 10px;
+    border-radius: 10px;
+}
+
+.ul:hover {
+    overflow-x: scroll;
+}
+
+.list {
+    display: flex;
+}
+
+.div {
+    max-width: 100%;
+}

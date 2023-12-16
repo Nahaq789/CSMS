@@ -1,0 +1,35 @@
+.container {
+    padding: 20px;
+    border-radius: 10px;
+    background-color: var(--color-grey);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.title {
+    font-weight: bold;
+    text-transform: capitalize;
+    color: var(--textSoft);
+}
+
+.menu {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: var(--color-grey);
+    padding: 10px;
+    border: 10px;
+    border-radius: 10px;
+}
+
+.icons {
+    display: flex;
+    gap: 20px;
+}
