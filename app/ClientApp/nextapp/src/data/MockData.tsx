@@ -305,3 +305,43 @@ export const mockPieData = [
         }
     ]
 ]
+// import React, { useState, useEffect } from 'react';
+// import { ResponsivePie } from '@nivo/pie';
+//
+// interface PieDataItem {
+//     id: string;
+//     label: string;
+//     value: number;
+//     color: string;
+// }
+//
+// const PieChart: React.FC = () => {
+//     const [data, setData] = useState<PieDataItem[]>([]);
+//
+//     useEffect(() => {
+//         const fetchData = async () => {
+//             try {
+//                 const response = await fetch('https://your-api-endpoint.com/data');
+//                 if (response.ok) {
+//                     const result = await response.json();
+//                     setData(result);
+//                 } else {
+//                     console.error('Failed to fetch data from API');
+//                 }
+//             } catch (error) {
+//                 console.error('Error fetching data:', error);
+//             }
+//         };
+//
+//         fetchData();
+//     }, []); // Empty dependency array means this effect runs once on component mount
+//
+//     return (
+//         <ResponsivePie
+//             data={data}
+//             // ... other props
+//         />
+//     );
+// };
+//
+// export default PieChart;
