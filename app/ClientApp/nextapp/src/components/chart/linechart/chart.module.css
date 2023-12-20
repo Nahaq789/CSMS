@@ -1,0 +1,14 @@
+.container {
+    height: 95%;
+    /*margin: -20px 0 0 0;*/
+    background-color: var(--color-grey);
+    padding: 20px;
+    border-radius: 10px;
+    width: 70%
+}
+
+.title {
+    font-weight: 200;
+    color: var(--textSoft);
+    margin-bottom: 20px;
+}

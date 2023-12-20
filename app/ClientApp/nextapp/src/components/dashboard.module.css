@@ -48,3 +48,10 @@
 .side {
     flex: 1;
 }
+
+.row_2 {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    max-height: 70%;
+}
