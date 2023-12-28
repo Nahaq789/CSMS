@@ -32,6 +32,6 @@
   color: var(--textSoft);
 }
 .line {
-  border-bottom: 100%;
+  border: solid;
   color: aqua;
 }

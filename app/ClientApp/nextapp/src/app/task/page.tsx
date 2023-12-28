@@ -56,7 +56,6 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
                       key={item.taskId}
                       sx={{
                         padding: "10px 20px 20px 20px",
-                        display: "flex",
                         gap: "20px",
                         fontSize: "1.5em",
                       }}
