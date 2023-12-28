@@ -1,5 +1,4 @@
 .container {
-  display: flex;
   background: var(--color-grey);
   gap: 20px;
   border-radius: 10px;
@@ -8,7 +7,7 @@
 
 .title {
   display: flex;
-  font-size: 13px;
+  /* font-size: 13px; */
   font-weight: bold;
   text-transform: capitalize;
   color: var(--textSoft);
@@ -25,4 +24,14 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+.column {
+  /* font-size: 13px; */
+  font-weight: bold;
+  text-transform: capitalize;
+  color: var(--textSoft);
+}
+.line {
+  border-bottom: 100%;
+  color: aqua;
 }

@@ -1,0 +1,13 @@
+﻿version: '3.8'
+services:
+  node:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    tty: true
+    volumes:
+      - ./:/usr/src/app
+      - ./node_modules:/usr/src/app
+    # command: sh -c "npm install && npm run dev"
+    ports:
+      - "3000:3000"
