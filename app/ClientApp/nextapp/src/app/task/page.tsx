@@ -3,10 +3,10 @@
 import { AxiosResponse } from "axios";
 import axios from "../../api/apiConfig";
 import { promises } from "dns";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import useSWR from "swr";
 import styles from "./task.module.css";
-import { Box, LinearProgress } from "@mui/material";
+import { Box, LinearProgress, rgbToHex } from "@mui/material";
 import { ContrastOutlined, Key } from "@mui/icons-material";
 import { blue, blueGrey, green, grey, red } from "@mui/material/colors";
 import {
@@ -20,15 +20,22 @@ import {
   GridRowId,
   GridRowModes,
   GridRowModel,
+  GridActionsCellItem,
+  GridRowProps,
 } from "@mui/x-data-grid";
-import { idID } from "@mui/material/locale";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Close";
+import { text } from "stream/consumers";
 
 interface Task {
-  taskId: string;
-  taskName: string;
-  contents: string;
-  customerId: string;
-  contractId: string;
+  TaskId: string;
+  TaskName: string;
+  Contents: string;
+  Deadline: Date;
+  CustomerId: string;
+  ContractId: string;
 }
 
 interface TaskProps {
@@ -55,14 +62,20 @@ function EditToolbar(props: EdirTollbarProps) {
 }
 
 const Task: React.FC<TaskProps> = (): React.JSX.Element => {
-  const fetcher = <T,>(url: string): Promise<T> =>
-    axios.get(url).then((res: AxiosResponse<T>) => res.data);
+  const fetcher = async <T,>(url: string): Promise<T> =>
+    await axios.get(url).then((res: AxiosResponse<T>) => res.data);
   const { data, error } = useSWR<GridRowsProp<Task>>("/api/Task/", fetcher);
   const [rows, setRows] = React.useState(data);
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
     {}
   );
-
+  const [getResult, setGetResult] = React.useState<Task>();
+  const [text, setText] = useState<string>("");
+  useEffect(() => {
+    if (data) {
+      setRows(data);
+    }
+  }, [data]);
   const handleRowEditStop: GridEventListener<"rowEditStop"> = (
     params,
     event
@@ -80,8 +93,33 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
-  const handleDeleteClick = (id: GridRowId) => () => {
-    setRows(rows?.filter((row) => row.taskId !== id));
+  const handleDeleteClick = (id: GridRowId) => async () => {
+    await axios.get(`/api/Task/${id}`).then((res: AxiosResponse<Task>) => {
+      // setGetResult(res.data);
+      axios
+        .delete("/api/Task/", {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          data: res.data,
+        })
+        .then((res) => {
+          // setGetResult(res.data);
+          setRows(rows?.filter((row) => row.TaskId !== id));
+        })
+        .catch((error) => {
+          if (error.response) {
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          } else if (error.request) {
+            console.log(error.request);
+          } else {
+            console.log("Error", error.message);
+          }
+          console.log(error.config);
+        });
+    });
   };
 
   const handleCancelClick = (id: GridRowId) => () => {
@@ -90,21 +128,31 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
       [id]: { mode: GridRowModes.View, ignoreModifications: true },
     });
 
-    const editedRow = rows?.find((row) => row.taskId === id);
-    setRows(rows?.filter((row) => row.taskId !== id));
+    const editedRow = rows?.find((row) => row.TaskId === id);
+    setRows(rows?.filter((row) => row.TaskId !== id));
   };
 
   const processRowUpdate = (newRow: GridRowModel) => {
     const UpdateRow: Task = {
       ...newRow,
-      taskId: "",
-      taskName: "",
-      contents: "",
-      customerId: "",
-      contractId: "",
+      TaskId: "",
+      TaskName: "",
+      Contents: "",
+      Deadline: new Date(),
+      CustomerId: "",
+      ContractId: "",
+    };
+
+    const payload: Task = {
+      TaskId: UpdateRow.TaskId,
+      TaskName: UpdateRow.TaskName,
+      Contents: UpdateRow.Contents,
+      Deadline: UpdateRow.Deadline,
+      CustomerId: UpdateRow.CustomerId,
+      ContractId: UpdateRow.ContractId,
     };
     setRows(
-      rows?.map((row) => (row.taskId === newRow.taskId ? UpdateRow : row))
+      rows?.map((row) => (row.TaskId === newRow.taskId ? UpdateRow : row))
     );
     return UpdateRow;
   };
@@ -120,21 +168,74 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
       headerName: "Name",
       flex: 1,
       cellClassName: "name-column--cell",
+      editable: true,
     },
     {
       field: "contents",
       headerName: "Content",
       flex: 1,
+      editable: true,
     },
     {
       field: "customerId",
       headerName: "CustomerID",
       flex: 1,
+      editable: true,
     },
     {
       field: "contractId",
       headerName: "ContractID",
       flex: 1,
+      editable: true,
+    },
+    {
+      field: "actions",
+      type: "actions",
+      headerName: "Actions",
+      width: 100,
+      cellClassName: "actions",
+      getActions: ({ id }) => {
+        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+
+        if (isInEditMode) {
+          return [
+            <GridActionsCellItem
+              icon={<SaveIcon />}
+              label="Save"
+              sx={{
+                color: "primary.main",
+              }}
+              onClick={handleSaveClick(id)}
+              key={id}
+            />,
+            <GridActionsCellItem
+              icon={<CancelIcon />}
+              label="Cancel"
+              className="textPrimary"
+              onClick={handleCancelClick(id)}
+              color="inherit"
+              key={id}
+            />,
+          ];
+        }
+        return [
+          <GridActionsCellItem
+            icon={<EditIcon />}
+            label="Edit"
+            className="textPrimary"
+            onClick={handleEditClick(id)}
+            color="inherit"
+            key={id}
+          />,
+          <GridActionsCellItem
+            icon={<DeleteIcon />}
+            label="Delete"
+            onClick={handleDeleteClick(id)}
+            color="inherit"
+            key={id}
+          />,
+        ];
+      },
     },
   ];
 
@@ -159,7 +260,7 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
                   color: green[400],
                 },
                 "& .MuiDataGrid-columnHeaders": {
-                  backgroundColor: blueGrey[200],
+                  backgroundColor: "rgba(230, 234, 236, 0.4)",
                   borderBottom: "none",
                   // color: "#b7bac1",
                   borderRadius: "10px",
@@ -169,7 +270,7 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
                 },
                 "& .MuiDataGrid-footerContainer": {
                   borderTop: "none",
-                  backgroundColor: blueGrey[200],
+                  backgroundColor: "rgba(230, 234, 236, 0.4)",
                   // color: "#b7bac1",
                   borderRadius: "10px",
                 },
@@ -177,19 +278,27 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
                   color: green,
                 },
                 "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+                  // color: "#b7bac1",
                   color: "#b7bac1",
                 },
               }}
             >
               <DataGrid
-                rows={data || []}
+                rows={rows || []}
                 columns={columns}
+                editMode="row"
+                rowModesModel={rowModesModel}
+                onRowModesModelChange={handleRowModesModelChange}
+                onRowEditStop={processRowUpdate}
                 slots={{
                   toolbar: GridToolbar,
                 }}
                 getRowId={(row) => row.taskId}
                 onRowClick={console.log}
                 disableRowSelectionOnClick
+                slotProps={{
+                  toolbar: { setRows, setRowModesModel },
+                }}
               />
             </Box>
           </Box>
