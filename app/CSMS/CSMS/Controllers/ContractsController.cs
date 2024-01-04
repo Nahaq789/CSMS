@@ -72,7 +72,7 @@ namespace CSMS.Controllers
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateAsync([FromBody] ContractModel contract)
@@ -92,7 +92,7 @@ namespace CSMS.Controllers
                 return BadRequest(result);
             }
         }
-        [HttpDelete("{id}")]
+        [HttpDelete]
         public async Task<IActionResult> Delete(ContractModel contract)
         {
             try

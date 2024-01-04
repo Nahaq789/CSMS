@@ -22,6 +22,7 @@ import {
   GridRowModel,
   GridActionsCellItem,
   GridRowProps,
+  GridRowParams,
 } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
@@ -89,8 +90,33 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
 
-  const handleSaveClick = (id: GridRowId) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+  const handleSaveClick = (params: Task) => () => {
+    const updateRow = {
+      Task: params,
+    };
+    console.log(params.TaskId);
+
+    // axios
+    //   .put("/api/Task/", {
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     data: updateRow,
+    //   })
+    //   .then((res: AxiosResponse<Task>) => {
+    //     const dbRow: Task = res.data;
+    //     // setRows(
+    //     //   rows?.map((r: { id: string }) =>
+    //     //     r.id === updateRow.id ? { ...dbRow } : r
+    //     //   )
+    //     // );
+    //     console.log(dbRow);
+    //   });
+    setRowModesModel({
+      ...rowModesModel,
+      ["550e8400-e29b-41d4-a716-446655440000"]: { mode: GridRowModes.View },
+    });
+    console.log(rowModesModel);
   };
 
   const handleDeleteClick = (id: GridRowId) => async () => {
@@ -105,7 +131,7 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
         })
         .then((res) => {
           // setGetResult(res.data);
-          setRows(rows?.filter((row) => row.TaskId !== id));
+          setRows(rows?.filter((row: Task) => row.TaskId != id));
         })
         .catch((error) => {
           if (error.response) {
@@ -132,29 +158,15 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
     setRows(rows?.filter((row) => row.TaskId !== id));
   };
 
-  const processRowUpdate = (newRow: GridRowModel) => {
-    const UpdateRow: Task = {
+  const processRowUpdate = (newRow: GridRowModel<Task>) => {
+    const updateRow = {
       ...newRow,
-      TaskId: "",
-      TaskName: "",
-      Contents: "",
-      Deadline: new Date(),
-      CustomerId: "",
-      ContractId: "",
-    };
-
-    const payload: Task = {
-      TaskId: UpdateRow.TaskId,
-      TaskName: UpdateRow.TaskName,
-      Contents: UpdateRow.Contents,
-      Deadline: UpdateRow.Deadline,
-      CustomerId: UpdateRow.CustomerId,
-      ContractId: UpdateRow.ContractId,
+      isNew: false,
     };
     setRows(
-      rows?.map((row) => (row.TaskId === newRow.taskId ? UpdateRow : row))
+      rows?.map((row) => (row.TaskId === newRow.TaskId ? updateRow : row))
     );
-    return UpdateRow;
+    return updateRow;
   };
 
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
@@ -194,8 +206,9 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
       headerName: "Actions",
       width: 100,
       cellClassName: "actions",
-      getActions: ({ id }) => {
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+      getActions: (params: GridRowParams<Task>) => {
+        const isInEditMode =
+          rowModesModel[params.id]?.mode === GridRowModes.Edit;
 
         if (isInEditMode) {
           return [
@@ -205,16 +218,16 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
               sx={{
                 color: "primary.main",
               }}
-              onClick={handleSaveClick(id)}
-              key={id}
+              onClick={handleSaveClick(params.row)}
+              key={params.id}
             />,
             <GridActionsCellItem
               icon={<CancelIcon />}
               label="Cancel"
               className="textPrimary"
-              onClick={handleCancelClick(id)}
+              onClick={handleCancelClick(params.id)}
               color="inherit"
-              key={id}
+              key={params.id}
             />,
           ];
         }
@@ -223,16 +236,16 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
             icon={<EditIcon />}
             label="Edit"
             className="textPrimary"
-            onClick={handleEditClick(id)}
+            onClick={handleEditClick(params.id)}
             color="inherit"
-            key={id}
+            key={params.id}
           />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
-            onClick={handleDeleteClick(id)}
+            onClick={handleDeleteClick(params.id)}
             color="inherit"
-            key={id}
+            key={params.id}
           />,
         ];
       },
@@ -285,19 +298,22 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
             >
               <DataGrid
                 rows={rows || []}
+                getRowId={(row) => row.taskId}
                 columns={columns}
                 editMode="row"
                 rowModesModel={rowModesModel}
                 onRowModesModelChange={handleRowModesModelChange}
-                onRowEditStop={processRowUpdate}
+                onRowEditStop={handleRowEditStop}
                 slots={{
                   toolbar: GridToolbar,
                 }}
-                getRowId={(row) => row.taskId}
                 onRowClick={console.log}
                 disableRowSelectionOnClick
                 slotProps={{
                   toolbar: { setRows, setRowModesModel },
+                }}
+                processRowUpdate={(updateRow) => {
+                  processRowUpdate(updateRow);
                 }}
               />
             </Box>
