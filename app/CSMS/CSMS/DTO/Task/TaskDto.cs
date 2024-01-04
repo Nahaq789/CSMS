@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace CSMS.DTO.Task;
 
 public class TaskDto
@@ -12,6 +14,7 @@ public class TaskDto
     public Guid CustomerId { get; private set; }
     public Guid ContractId { get; private set; }
 
+    [JsonConstructor]
     public TaskDto(Guid taskId, string taskName, string contents, DateTime deadline, Guid customerId, Guid contractId)
     {
         TaskId = taskId;
