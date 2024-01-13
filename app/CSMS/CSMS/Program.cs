@@ -7,6 +7,10 @@ using AutoMapper;
 using CSMS.Domain.DomainService;
 using CSMS.Domain.DomainService.Interface;
 using CSMS.Domain.Models;
+using System.Reflection;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
+using System.Reflection.Metadata;
 
 var builder = WebApplication.CreateBuilder(args);
 var AllowSpecificOrigins = "_AllowSpecificOrigins";
@@ -17,6 +21,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
 builder.Services.AddCors(options =>
 {

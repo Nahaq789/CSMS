@@ -1,13 +1,13 @@
-using AutoMapper;
+﻿using AutoMapper;
 using CSMS.Domain.Models;
 using CSMS.UseCase.Commands.TaskCommand;
 
 namespace CSMS.DTO.Task;
 
-public class TaskProfile : Profile
+public class TaskCommandProfile : Profile
 {
-    public TaskProfile() =>
-        CreateMap<TaskDto, CreateTaskCommand>()
+    public TaskCommandProfile() =>
+        CreateMap<CreateTaskCommand, TaskModel>()
             .ForMember(
                 dest => dest.TaskId,
                 opt =>

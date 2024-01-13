@@ -1,4 +1,4 @@
-﻿namespace CSMS.ApplicationService
+﻿namespace CSMS.UseCase.ApplicationService
 {
     public class ApplicationService
     {

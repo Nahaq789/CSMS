@@ -2,6 +2,8 @@ using AutoMapper;
 using CSMS.Domain.DomainService.Interface;
 using CSMS.Domain.Models;
 using CSMS.DTO.Task;
+using CSMS.UseCase.Commands.TaskCommand;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
@@ -12,12 +14,14 @@ namespace CSMS.Presentation.Controllers;
 public class TaskController : ControllerBase
 {
     private readonly ITaskService<TaskModel> _taskService;
+    private readonly IMediator _mediator;
     private IMapper _mapper;
 
-    public TaskController(ITaskService<TaskModel> taskService, IMapper mapper)
+    public TaskController(ITaskService<TaskModel> taskService, IMapper mapper, IMediator mediator)
     {
         _taskService = taskService;
         _mapper = mapper;
+        _mediator = mediator;
     }
 
     [HttpGet]
@@ -48,9 +52,9 @@ public class TaskController : ControllerBase
         }
     }
 
-    [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    //[HttpPost]
+    //[ProducesResponseType(StatusCodes.Status201Created)]
+    //[ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> PostAsync([FromBody] TaskDto task)
     {
         try
@@ -132,5 +136,42 @@ public class TaskController : ControllerBase
                 $"It was not possible to delete a new task, please try later on ({ex.GetType().Name} - {ex.Message})";
             return BadRequest(result);
         }
+    }
+
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateTask([FromBody] TaskDto task)
+    {
+        try
+        {
+            if (ModelState.IsValid)
+            {
+                var createTaskCommand = new CreateTaskCommand(
+                  task.TaskId,
+                  task.TaskName,
+                  task.Contents,
+                  task.Deadline,
+                  task.CustomerId,
+                  task.ContractId);
+
+                var result = await _mediator.Send(createTaskCommand);
+
+                return Ok(result);
+            }
+            else
+            {
+                {
+                    return BadRequest("Failed to create task");
+                }
+            }
+        }catch (Exception ex)
+        {
+            var result =
+                $"It was not possible to create a new task, please try later on ({ex.GetType().Name} - {ex.Message})";
+            return BadRequest(result);
+        }
+        
+
     }
 }
