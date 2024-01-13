@@ -171,7 +171,8 @@ public class TaskController : ControllerBase
                     return BadRequest("Failed to create task");
                 }
             }
-        }catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             var result =
                 $"It was not possible to create a new task, please try later on ({ex.GetType().Name} - {ex.Message})";
