@@ -1,11 +1,10 @@
-﻿using CSMS.Models;
-using CSMS.Repository;
+﻿using CSMS.Repository;
 using NuGet.Protocol.Core.Types;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
-namespace CSMS.Models
+namespace CSMS.Domain.Models
 {
     public class CustomerModel
     {
@@ -18,20 +17,20 @@ namespace CSMS.Models
         [Required]
         public int Age { get; private set; }
         [JsonConstructor]
-        public CustomerModel(Guid customerID, string name, string email, int age) 
+        public CustomerModel(Guid customerID, string name, string email, int age)
         {
-            this.CustomerId = customerID;
-            this.Name = name;
-            this.Email = email;
-            this.Age = age;
+            CustomerId = customerID;
+            Name = name;
+            Email = email;
+            Age = age;
         }
 
-        public CustomerModel(string name, string email, int age) 
+        public CustomerModel(string name, string email, int age)
         {
-            this.CustomerId = Guid.NewGuid();
-            this.Name = name;
-            this.Email = email;
-            this.Age = age;
+            CustomerId = Guid.NewGuid();
+            Name = name;
+            Email = email;
+            Age = age;
         }
         //public Guid AssociateId { get; set; }
         //public ICollection<CustomerModel> Associates { get; set; }

@@ -6,13 +6,13 @@ using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 using JsonConstructorAttribute = System.Text.Json.Serialization.JsonConstructorAttribute;
 
-namespace CSMS.Models.ValueObject
+namespace CSMS.Domain.Models.ValueObject
 {
     public class AmountExcludingTax
     {
         public decimal Value { get; private set; }
         public AmountExcludingTax() { }
-        public AmountExcludingTax(decimal money) 
+        public AmountExcludingTax(decimal money)
         {
             if (!IsValid(money)) throw new ArgumentOutOfRangeException();
             Value = money;

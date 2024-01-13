@@ -1,5 +1,5 @@
 using AutoMapper;
-using CSMS.Models;
+using CSMS.Domain.Models;
 
 namespace CSMS.DTO;
 

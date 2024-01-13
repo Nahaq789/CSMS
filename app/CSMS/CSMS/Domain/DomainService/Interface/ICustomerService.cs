@@ -1,7 +1,7 @@
 ﻿using System.Data.Entity;
 using static CSMS.GlobalEnum.GlobalEnum;
 
-namespace CSMS.DomainService.Interface
+namespace CSMS.Domain.DomainService.Interface
 {
     public interface ICustomerService<T> where T : class
     {

@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
-using CSMS.Models.ValueObject;
+using CSMS.Domain.Models.ValueObject;
 using Newtonsoft.Json;
 
-namespace CSMS.Models;
+namespace CSMS.Domain.Models;
 
 public class EstimateModel
 {
@@ -20,8 +20,8 @@ public class EstimateModel
     public AmountIncludingTax AmountIncludingTax { get; }
     public TaxRate TaxRate { get; }
 
-    public EstimateModel() {}
-    
+    public EstimateModel() { }
+
     [JsonConstructor]
     public EstimateModel(
         Guid estimateId,
@@ -30,12 +30,12 @@ public class EstimateModel
         decimal _money
     )
     {
-        this.EstimateId = estimateId;
-        this.EstimateCode = estimateCode;
-        this.EstimateName = estimateName;
-        this._Money = _money;
-        this.AmountExcludingTax = new AmountExcludingTax(_Money);
-        this.TaxRate = new TaxRate();
-        this.AmountIncludingTax = new AmountIncludingTax(AmountExcludingTax, TaxRate);
+        EstimateId = estimateId;
+        EstimateCode = estimateCode;
+        EstimateName = estimateName;
+        _Money = _money;
+        AmountExcludingTax = new AmountExcludingTax(_Money);
+        TaxRate = new TaxRate();
+        AmountIncludingTax = new AmountIncludingTax(AmountExcludingTax, TaxRate);
     }
 }

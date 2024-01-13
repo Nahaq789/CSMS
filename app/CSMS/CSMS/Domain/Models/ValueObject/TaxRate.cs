@@ -3,16 +3,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
-namespace CSMS.Models.ValueObject
+namespace CSMS.Domain.Models.ValueObject
 {
     public class TaxRate
     {
         public decimal Value { get; private set; }
         public TaxRate() { }
-        
-        public TaxRate(decimal rate) 
+
+        public TaxRate(decimal rate)
         {
-            if(!IsValid(rate))
+            if (!IsValid(rate))
             {
                 throw new ArgumentException();
             }

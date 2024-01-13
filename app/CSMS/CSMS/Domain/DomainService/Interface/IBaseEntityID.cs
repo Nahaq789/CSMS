@@ -1,4 +1,4 @@
-﻿namespace CSMS.DomainService.Interface
+﻿namespace CSMS.Domain.DomainService.Interface
 {
     public interface IBaseEntityID
     {

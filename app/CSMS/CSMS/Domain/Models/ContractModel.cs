@@ -1,4 +1,4 @@
-﻿using CSMS.Models.ValueObject;
+﻿using CSMS.Domain.Models.ValueObject;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -9,7 +9,7 @@ using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 using JsonConstructorAttribute = System.Text.Json.Serialization.JsonConstructorAttribute;
 
-namespace CSMS.Models
+namespace CSMS.Domain.Models
 {
     public class ContractModel
     {
@@ -22,7 +22,7 @@ namespace CSMS.Models
         public Guid CustomerId { get; private set; }
         public AmountExcludingTax Money { get; }
         public TaxRate TaxRate { get; }
-        
+
         [NotMapped]
         public decimal _Money { get; private set; }
         [NotMapped]
@@ -38,14 +38,14 @@ namespace CSMS.Models
             decimal _taxRate
         )
         {
-            this.ContractId = contractId;
-            this.ContractName = contractName;
-            this.ContractCode = contractCode;
-            this.CustomerId = customerId;
-            this._Money = _money;
-            this._TaxRate = _taxRate;
-            this.Money = new AmountExcludingTax(_money);
-            this.TaxRate = new TaxRate(_taxRate);
+            ContractId = contractId;
+            ContractName = contractName;
+            ContractCode = contractCode;
+            CustomerId = customerId;
+            _Money = _money;
+            _TaxRate = _taxRate;
+            Money = new AmountExcludingTax(_money);
+            TaxRate = new TaxRate(_taxRate);
         }
     }
 }

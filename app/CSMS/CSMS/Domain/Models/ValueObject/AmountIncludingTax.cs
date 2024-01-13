@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
-namespace CSMS.Models.ValueObject
+namespace CSMS.Domain.Models.ValueObject
 {
     public class AmountIncludingTax
     {
@@ -13,7 +13,7 @@ namespace CSMS.Models.ValueObject
         public AmountIncludingTax() { }
         public AmountIncludingTax(AmountExcludingTax amountExcludingTax, TaxRate taxRate)
         {
-            TaxMoney = amountExcludingTax.Value * (1 + (taxRate.Value / 100));
+            TaxMoney = amountExcludingTax.Value * (1 + taxRate.Value / 100);
         }
     }
 }

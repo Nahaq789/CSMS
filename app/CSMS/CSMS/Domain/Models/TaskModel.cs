@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
-namespace CSMS.Models;
+namespace CSMS.Domain.Models;
 
 public class TaskModel
 {

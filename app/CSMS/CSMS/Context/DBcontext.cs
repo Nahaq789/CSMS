@@ -1,5 +1,5 @@
-﻿using CSMS.Models;
-using CSMS.Models.ValueObject;
+﻿using CSMS.Domain.Models;
+using CSMS.Domain.Models.ValueObject;
 using Microsoft.EntityFrameworkCore;
 
 public class ApplicationDbContext : DbContext

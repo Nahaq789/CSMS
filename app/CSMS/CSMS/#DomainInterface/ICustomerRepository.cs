@@ -1,4 +1,4 @@
-﻿using CSMS.Models;
+﻿using CSMS.Domain.Models;
 using System.Security.Permissions;
 
 namespace CSMS.DomainInterface

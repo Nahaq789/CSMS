@@ -1,24 +1,21 @@
-﻿using CSMS.DomainService.Interface;
-using CSMS.Models;
-
+﻿using static CSMS.GlobalEnum.GlobalEnum;
 using Microsoft.EntityFrameworkCore;
-using CSMS.DomainInterface;
-using static CSMS.GlobalEnum.GlobalEnum;
+using CSMS.Domain.DomainService.Interface;
+using CSMS.Domain.Models;
 
-namespace CSMS.DomainService
+namespace CSMS.Domain.DomainService
 {
-    public class CustomerService : IBaseEntityID, ICustomerService<CustomerModel>
-  {
+    public class ContractService : IBaseEntityID, IContractService<ContractModel>
+    {
         private readonly ApplicationDbContext _context;
-        private DbSet<CustomerModel> DbSet { get; set; }
         public Guid EntityID { get; set; }
 
-        public CustomerService (ApplicationDbContext context)
+        public ContractService(ApplicationDbContext context)
         {
-            this._context = context;
-            DbSet = _context.Set<CustomerModel>();
+            _context = context;
         }
-        public async Task<CustomerModel> GetByID(Guid id)
+
+        public async Task<ContractModel> GetByID(Guid id)
         {
             var transaction = _context.Database.CurrentTransaction;
             if (transaction != null)
@@ -27,11 +24,7 @@ namespace CSMS.DomainService
             }
             try
             {
-                var result = await _context.Customers.FindAsync(id);
-                if (result == null)
-                {
-                    throw new Exception();
-                }
+                var result = await _context.Contracts.FindAsync(id) ?? throw new NullReferenceException();
                 return result;
             }
             catch (Exception ex)
@@ -42,10 +35,14 @@ namespace CSMS.DomainService
                     System.Diagnostics.Debug.WriteLine(ex.Message);
                     throw;
                 }
+                if (ex.Message == "Object reference not set to an instance of an object.")
+                {
+                    throw new NullReferenceException();
+                }
                 throw new Exception();
             }
         }
-        public async Task<IEnumerable<CustomerModel>> GetAll()
+        public async Task<IEnumerable<ContractModel>> GetAll()
         {
             var transaction = _context.Database.CurrentTransaction;
             if (transaction != null)
@@ -54,7 +51,7 @@ namespace CSMS.DomainService
             }
             try
             {
-                var result = await _context.Customers.ToListAsync();
+                var result = await _context.Contracts.ToListAsync();
                 if (result == null) { throw new Exception(); }
                 return result;
             }
@@ -69,7 +66,7 @@ namespace CSMS.DomainService
                 throw new Exception();
             }
         }
-        public async Task<Guid> Add(CustomerModel customer)
+        public async Task<Guid> Add(ContractModel contract)
         {
             var transaction = _context.Database.CurrentTransaction;
             if (transaction != null)
@@ -78,9 +75,18 @@ namespace CSMS.DomainService
             }
             try
             {
-                await _context.AddAsync(customer);
+                var newContract = new ContractModel(
+                    contract.ContractId,
+                    contract.ContractName,
+                    contract.ContractCode,
+                    contract.CustomerId,
+                    contract._Money,
+                    contract._TaxRate
+
+                );
+                await _context.Contracts.AddAsync(newContract);
                 await _context.SaveChangesAsync();
-                return customer.CustomerId;
+                return contract.ContractId;
             }
             catch (Exception ex)
             {
@@ -93,36 +99,37 @@ namespace CSMS.DomainService
                 throw new Exception();
             }
         }
-        public async Task<UpdateResult> Update(CustomerModel customer)
+        public async Task<UpdateResult> Update(ContractModel contract)
         {
             var transaction = _context.Database.CurrentTransaction;
-            if(transaction != null)
+            if (transaction != null)
             {
                 await transaction.CreateSavepointAsync("Update");
             }
             try
             {
-                var target = await _context.Customers.FirstOrDefaultAsync(x => x.CustomerId == customer.CustomerId);
+                var target = await _context.Contracts.FirstOrDefaultAsync(x => x.ContractId == contract.ContractId);
                 if (target == null) { throw new Exception(); }
-                CustomerModel customerModel = new CustomerModel(
-                    customer.CustomerId,
-                    customer.Name,
-                    customer.Email,
-                    customer.Age
-                );
 
-                _context.Customers.Entry(target).State = EntityState.Detached;
+                ContractModel contractModel = new ContractModel(
+                    contract.ContractId,
+                    contract.ContractName,
+                    contract.ContractCode,
+                    contract.CustomerId,
+                    contract._Money,
+                    contract._TaxRate
+                    );
 
-                _context.Customers.Attach(customerModel);
-
-                _context.Customers.Update(customerModel);
+                _context.Contracts.Entry(target).State = EntityState.Detached;
+                _context.Contracts.Attach(contractModel);
+                _context.Contracts.Update(contractModel);
                 await _context.SaveChangesAsync();
 
                 return UpdateResult.Success;
             }
             catch (Exception ex)
             {
-                if(transaction != null)
+                if (transaction != null)
                 {
                     await transaction.RollbackToSavepointAsync("Update");
                     System.Diagnostics.Debug.WriteLine(ex.Message);
@@ -131,7 +138,7 @@ namespace CSMS.DomainService
                 return UpdateResult.Failed;
             }
         }
-        public async Task<DeleteResult> Delete(CustomerModel customer)
+        public async Task<DeleteResult> Delete(ContractModel contractModel)
         {
             var transaction = _context.Database.CurrentTransaction;
             if (transaction != null)
@@ -140,7 +147,13 @@ namespace CSMS.DomainService
             }
             try
             {
-                _context.Customers.Remove(customer);
+                var target =
+                    await _context.Contracts.FirstOrDefaultAsync(x => x.ContractId == contractModel.ContractId);
+                if (target == null) { throw new Exception(); }
+
+                _context.Contracts.Entry(target).State = EntityState.Detached;
+                _context.Contracts.Attach(contractModel);
+                _context.Contracts.Remove(contractModel);
                 await _context.SaveChangesAsync();
                 return DeleteResult.Success;
             }
@@ -155,13 +168,5 @@ namespace CSMS.DomainService
                 return DeleteResult.Failed;
             }
         }
-
-        //public Task AddAssociateCustomer(ICustomerRepositry repositry, int otherId)
-        //{
-        //    var other = await Repository.GetById(targetId);
-        //    Associates.Add(other);
-        //    await repositry.Update(customer);
-        //}
     }
 }
-

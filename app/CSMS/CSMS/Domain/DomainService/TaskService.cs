@@ -1,8 +1,8 @@
-using CSMS.DomainService.Interface;
-using CSMS.Models;
+using CSMS.Domain.DomainService.Interface;
+using CSMS.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace CSMS.DomainService;
+namespace CSMS.Domain.DomainService;
 
 public class TaskService : IBaseEntityID, ITaskService<TaskModel>
 {
@@ -12,7 +12,7 @@ public class TaskService : IBaseEntityID, ITaskService<TaskModel>
 
     public TaskService(ApplicationDbContext context)
     {
-        this._context = context;
+        _context = context;
     }
 
     public async Task<TaskModel> GetByID(Guid id)
@@ -40,7 +40,7 @@ public class TaskService : IBaseEntityID, ITaskService<TaskModel>
                 System.Diagnostics.Debug.WriteLine(ex.Message);
                 throw;
             }
-            if(ex.Message == "Object reference not set to an instance of an object.")
+            if (ex.Message == "Object reference not set to an instance of an object.")
             {
                 throw new NullReferenceException();
             }
@@ -103,7 +103,7 @@ public class TaskService : IBaseEntityID, ITaskService<TaskModel>
     public async Task<GlobalEnum.GlobalEnum.UpdateResult> Update(TaskModel task)
     {
         var transaction = _context.Database.CurrentTransaction;
-        if(transaction != null)
+        if (transaction != null)
         {
             await transaction.CreateSavepointAsync("Update");
         }
@@ -132,7 +132,7 @@ public class TaskService : IBaseEntityID, ITaskService<TaskModel>
         }
         catch (Exception ex)
         {
-            if(transaction != null)
+            if (transaction != null)
             {
                 await transaction.RollbackToSavepointAsync("Update");
                 System.Diagnostics.Debug.WriteLine(ex.Message);
