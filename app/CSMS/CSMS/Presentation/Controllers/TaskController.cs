@@ -62,7 +62,7 @@ public class TaskController : ControllerBase
             var _task = _mapper.Map<TaskModel>(task);
             if (ModelState.IsValid)
             {
-                await _taskService.Add(_task);
+                //await _taskService.Add(_task);
                 return Ok(task);
             }
             else
@@ -87,14 +87,20 @@ public class TaskController : ControllerBase
     {
         try
         {
-            var _task = _mapper.Map<TaskModel>(task);
+            //var _task = _mapper.Map<TaskModel>(task);
             if (ModelState.IsValid)
             {
+                var createTaskCommand = new CreateTaskCommand(
+                  task.TaskId,
+                  task.TaskName,
+                  task.Contents,
+                  task.Deadline,
+                  task.CustomerId,
+                  task.ContractId);
 
-                var result = await _taskService.Update(_task);
-                return result == GlobalEnum.GlobalEnum.UpdateResult.Success
-                    ? Ok(task)
-                    : BadRequest("Failed to update task");
+                var result = await _mediator.Send(createTaskCommand);
+
+                return Ok(result);
             }
             else
             {
@@ -171,7 +177,5 @@ public class TaskController : ControllerBase
                 $"It was not possible to create a new task, please try later on ({ex.GetType().Name} - {ex.Message})";
             return BadRequest(result);
         }
-        
-
     }
 }

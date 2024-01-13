@@ -1,6 +1,8 @@
 ﻿using CSMS.Domain.DomainService;
 using CSMS.Domain.DomainService.Interface;
 using CSMS.Domain.Models;
+using CSMS.UseCase.Behavior;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -16,6 +18,8 @@ public class StartupDI
             option.LogTo((message) => System.Diagnostics.Debug.WriteLine(message));
             option.UseNpgsql(connectionString);
         });
+
+        builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
 
         builder.Services.AddScoped<ICustomerService<CustomerModel>, CustomerService>();
         builder.Services.AddScoped<IContractService<ContractModel>, ContractService>();

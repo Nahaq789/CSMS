@@ -1,11 +1,12 @@
-﻿using CSMS.DTO.Task;
+﻿using CSMS.Domain.Models;
+using CSMS.DTO.Task;
 using MediatR;
 using System.Runtime.Serialization;
 
 namespace CSMS.UseCase.Commands.TaskCommand;
 
 [DataContract]
-public class CreateTaskCommand : IRequest<Unit>
+public class CreateTaskCommand : IRequest<TaskModel>
 {
     private readonly List<TaskDto> _tasks;
     [DataMember]

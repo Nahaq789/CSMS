@@ -11,6 +11,7 @@ using System.Reflection;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection.Metadata;
+using CSMS.UseCase.Behavior;
 
 var builder = WebApplication.CreateBuilder(args);
 var AllowSpecificOrigins = "_AllowSpecificOrigins";
@@ -40,11 +41,11 @@ StartupDI.Setup(builder);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI();
+//}
 
 app.UseHttpsRedirection();
 
@@ -86,6 +87,7 @@ public class Startup
         services.AddCors();
         services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
         services.AddScoped<ICustomerService<CustomerModel>, CustomerService>();
+        
         services.AddControllers();
     }
 

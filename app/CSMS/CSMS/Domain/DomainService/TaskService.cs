@@ -74,7 +74,7 @@ public class TaskService : IBaseEntityID, ITaskService<TaskModel>
         }
     }
 
-    public async Task<Guid> Add(TaskModel task)
+    public async Task<TaskModel> Add(TaskModel task, CancellationToken cancellationToken)
     {
         var transaction = _context.Database.CurrentTransaction;
         if (transaction != null)
@@ -86,7 +86,7 @@ public class TaskService : IBaseEntityID, ITaskService<TaskModel>
         {
             await _context.Task.AddAsync(task);
             await _context.SaveChangesAsync();
-            return task.TaskId;
+            return await Task.FromResult(task);
         }
         catch (Exception ex)
         {
@@ -100,7 +100,7 @@ public class TaskService : IBaseEntityID, ITaskService<TaskModel>
         }
     }
 
-    public async Task<GlobalEnum.GlobalEnum.UpdateResult> Update(TaskModel task)
+    public async Task<TaskModel> Update(TaskModel task, CancellationToken cancellationToken)
     {
         var transaction = _context.Database.CurrentTransaction;
         if (transaction != null)
@@ -128,7 +128,7 @@ public class TaskService : IBaseEntityID, ITaskService<TaskModel>
 
             await _context.SaveChangesAsync();
 
-            return GlobalEnum.GlobalEnum.UpdateResult.Success;
+            return await Task.FromResult(task);
         }
         catch (Exception ex)
         {
@@ -138,7 +138,7 @@ public class TaskService : IBaseEntityID, ITaskService<TaskModel>
                 System.Diagnostics.Debug.WriteLine(ex.Message);
                 throw;
             }
-            return GlobalEnum.GlobalEnum.UpdateResult.Failed;
+            return await Task.FromResult(task);
         }
     }
 
