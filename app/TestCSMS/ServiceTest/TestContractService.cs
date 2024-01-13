@@ -1,5 +1,5 @@
-﻿using CSMS.DomainService;
-using CSMS.Models;
+﻿using CSMS.Domain.DomainService;
+using CSMS.Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.Mapping;
 using System;

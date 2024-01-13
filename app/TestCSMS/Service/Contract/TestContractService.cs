@@ -1,14 +1,14 @@
-﻿using CSMS.DomainService;
-using CSMS.Models;
+﻿using CSMS.Domain.DomainService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CSMS.Models.ValueObject;
-using CSMS.DomainService.Interface;
 using System.Diagnostics.Contracts;
 using Microsoft.Build.ObjectModelRemoting;
+using CSMS.Domain.DomainService.Interface;
+using CSMS.Domain.Models;
+using CSMS.Domain.Models.ValueObject;
 
 namespace TestCSMS.Service.Contract
 {

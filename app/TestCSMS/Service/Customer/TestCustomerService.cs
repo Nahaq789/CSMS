@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using CSMS.Controllers;
-using CSMS.DomainService;
-using CSMS.DomainService.Interface;
+using CSMS.Presentation.Controllers;
+using CSMS.Domain.DomainService.Interface;
+using CSMS.Domain.Models;
+using CSMS.Domain.DomainService;
 using CSMS.DTO;
-using CSMS.Models;
 using Moq;
 using NuGet.ContentModel;
 using TestCSMS;

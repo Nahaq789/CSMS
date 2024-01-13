@@ -1,8 +1,8 @@
 ﻿using System.IO.Pipelines;
-using CSMS.DomainService;
-using CSMS.DomainService.Interface;
+using CSMS.Domain.DomainService.Interface;
+using CSMS.Domain.Models;
+using CSMS.Domain.DomainService;
 using CSMS.GlobalEnum;
-using CSMS.Models;
 
 namespace TestCSMS.Service.Task;
 

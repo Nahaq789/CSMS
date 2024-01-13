@@ -1,6 +1,6 @@
-﻿using CSMS.DomainService;
-using CSMS.DomainService.Interface;
-using CSMS.Models;
+﻿using CSMS.Domain.DomainService;
+using CSMS.Domain.DomainService.Interface;
+using CSMS.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

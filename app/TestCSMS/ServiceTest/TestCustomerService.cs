@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using CSMS.Controllers;
-using CSMS.DomainService;
+using CSMS.Presentation.Controllers;
+using CSMS.Domain.Models;
+using CSMS.Domain.DomainService;
 using CSMS.DTO;
-using CSMS.Models;
 using NuGet.ContentModel;
 using TestCSMS;
 using static CSMS.GlobalEnum.GlobalEnum;

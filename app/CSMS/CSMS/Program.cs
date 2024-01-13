@@ -1,12 +1,12 @@
-using CSMS.Controllers;
-using CSMS.DomainService;
-using CSMS.DomainService.Interface;
-using CSMS.Models;
+using CSMS.Presentation.Controllers;
 using CSMS.Repository;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using System.Configuration;
 using AutoMapper;
+using CSMS.Domain.DomainService;
+using CSMS.Domain.DomainService.Interface;
+using CSMS.Domain.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 var AllowSpecificOrigins = "_AllowSpecificOrigins";
