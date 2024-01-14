@@ -4,10 +4,10 @@ using CSMS.UseCase.Commands.TaskCommand;
 
 namespace CSMS.DTO.Task;
 
-public class TaskCommandProfile : Profile
+public class UpdateTaskCommandProfile : Profile
 {
-    public TaskCommandProfile() =>
-        CreateMap<CreateTaskCommand, TaskModel>()
+    public UpdateTaskCommandProfile() =>
+        CreateMap<TaskDto, UpdateTaskCommand>()
             .ForMember(
                 dest => dest.TaskId,
                 opt =>

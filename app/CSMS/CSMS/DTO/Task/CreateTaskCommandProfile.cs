@@ -4,9 +4,9 @@ using CSMS.UseCase.Commands.TaskCommand;
 
 namespace CSMS.DTO.Task;
 
-public class TaskProfile : Profile
+public class CreateTaskCommandProfile : Profile
 {
-    public TaskProfile() =>
+    public CreateTaskCommandProfile() =>
         CreateMap<TaskDto, CreateTaskCommand>()
             .ForMember(
                 dest => dest.TaskId,

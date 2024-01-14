@@ -90,15 +90,8 @@ public class TaskController : ControllerBase
             //var _task = _mapper.Map<TaskModel>(task);
             if (ModelState.IsValid)
             {
-                var createTaskCommand = new CreateTaskCommand(
-                  task.TaskId,
-                  task.TaskName,
-                  task.Contents,
-                  task.Deadline,
-                  task.CustomerId,
-                  task.ContractId);
-
-                var result = await _mediator.Send(createTaskCommand);
+                var _taskCreateCommand = _mapper.Map<UpdateTaskCommand>(task);
+                var result = await _mediator.Send(_taskCreateCommand);
 
                 return Ok(result);
             }
@@ -153,15 +146,8 @@ public class TaskController : ControllerBase
         {
             if (ModelState.IsValid)
             {
-                var createTaskCommand = new CreateTaskCommand(
-                  task.TaskId,
-                  task.TaskName,
-                  task.Contents,
-                  task.Deadline,
-                  task.CustomerId,
-                  task.ContractId);
-
-                var result = await _mediator.Send(createTaskCommand);
+                var _taskCreateCommand = _mapper.Map<CreateTaskCommand>(task);
+                var result = await _mediator.Send(_taskCreateCommand);
 
                 return Ok(result);
             }

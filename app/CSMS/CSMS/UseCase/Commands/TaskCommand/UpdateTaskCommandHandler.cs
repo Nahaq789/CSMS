@@ -29,10 +29,10 @@ namespace CSMS.UseCase.Commands.TaskCommand
 
             var requestUpdateTask = new IdentifiedCommand<UpdateTaskCommand>(message);
 
-            //_logger.LogInformation("Sending command: {CommandName} - ({@Command})",
-                //requestUpdateTask.GetGenericTypeName(),
-                //requestUpdateTask
-                //);
+            _logger.LogInformation("Sending command: {CommandName} - ({@Command})",
+                requestUpdateTask.GetGenericTypeName(),
+                requestUpdateTask
+                );
 
             var result = await _taskService.Update(task, cancellationToken);
 
