@@ -26,7 +26,7 @@ public class DeleteTaskCommandHandler
 
         var result = await _taskService.Delete(message.TaskId);
 
-        if (result != null)
+        if (result != Guid.Empty)
         {
             _logger.LogInformation("Deleting Task Ok - Task: {@Task}", requestDeleteTask);
         }
