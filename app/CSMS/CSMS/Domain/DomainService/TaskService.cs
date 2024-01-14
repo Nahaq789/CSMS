@@ -142,7 +142,7 @@ public class TaskService : IBaseEntityID, ITaskService<TaskModel>
         }
     }
 
-    public async Task<GlobalEnum.GlobalEnum.DeleteResult> Delete(TaskModel task)
+    public async Task<Guid> Delete(Guid guid, CancellationToken cancellationToken)
     {
         var transaction = _context.Database.CurrentTransaction;
         if (transaction != null)
@@ -152,9 +152,18 @@ public class TaskService : IBaseEntityID, ITaskService<TaskModel>
 
         try
         {
-            _context.Task.Remove(task);
+            var result = await _context.Task.FindAsync(guid);
+            if(result != null)
+            {
+                _context.Task.Remove(result);
+            }
+            else
+            {
+                throw new ArgumentException();
+            }
+
             await _context.SaveChangesAsync();
-            return GlobalEnum.GlobalEnum.DeleteResult.Success;
+            return await Task.FromResult(guid);
         }
         catch (Exception ex)
         {
@@ -164,7 +173,7 @@ public class TaskService : IBaseEntityID, ITaskService<TaskModel>
                 System.Diagnostics.Debug.WriteLine(ex.Message);
                 throw;
             }
-            return GlobalEnum.GlobalEnum.DeleteResult.Failed;
+            return await Task.FromResult(guid);
         }
     }
 }

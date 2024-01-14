@@ -1,6 +1,7 @@
 ﻿using CSMS.Domain.DomainService;
 using CSMS.Domain.DomainService.Interface;
 using CSMS.Domain.Models;
+using CSMS.Infrastracture.Repository.Task;
 using CSMS.UseCase.Behavior;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -24,5 +25,7 @@ public class StartupDI
         builder.Services.AddScoped<ICustomerService<CustomerModel>, CustomerService>();
         builder.Services.AddScoped<IContractService<ContractModel>, ContractService>();
         builder.Services.AddScoped<ITaskService<TaskModel>, TaskService>();
+
+        builder.Services.AddScoped<ITaskRepository<TaskModel>, TaskRepository>();
     }
 }
