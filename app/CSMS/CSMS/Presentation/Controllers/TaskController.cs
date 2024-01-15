@@ -14,13 +14,12 @@ namespace CSMS.Presentation.Controllers;
 [Route("api/[controller]")]
 public class TaskController : ControllerBase
 {
-    private readonly ITaskService<TaskModel> _taskService;
+    //private readonly ITaskService<TaskModel> _taskService;
     private readonly IMediator _mediator;
     private IMapper _mapper;
 
-    public TaskController(ITaskService<TaskModel> taskService, IMapper mapper, IMediator mediator)
+    public TaskController(IMapper mapper, IMediator mediator)
     {
-        _taskService = taskService;
         _mapper = mapper;
         _mediator = mediator;
     }
@@ -148,7 +147,7 @@ public class TaskController : ControllerBase
     public async Task<IActionResult> CreateTask([FromBody] TaskDto task)
     {
         try
-        {
+        Å@{
             if (ModelState.IsValid)
             {
                 var _taskCreateCommand = _mapper.Map<CreateTaskCommand>(task);

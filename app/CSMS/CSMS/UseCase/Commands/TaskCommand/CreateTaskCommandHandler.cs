@@ -9,15 +9,12 @@ namespace CSMS.UseCase.Commands.TaskCommand
     public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, TaskModel>
     {
         private readonly ITaskService<TaskModel> _taskService;
-        private readonly IMediator _mediator;
         private readonly ILogger<CreateTaskCommandHandler> _logger;
 
         public CreateTaskCommandHandler(ITaskService<TaskModel> taskService, 
-            IMediator mediator, 
             ILogger<CreateTaskCommandHandler> logger)
         {
             _taskService = taskService ?? throw new ArgumentException(nameof(taskService));
-            _mediator = mediator ?? throw new ArgumentException(nameof(mediator));
             _logger = logger ?? throw new ArgumentException(nameof(logger));
         }
 

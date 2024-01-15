@@ -13,6 +13,7 @@ namespace TestCSMS.DB
         {
             using var t = context.Database.BeginTransaction();
             SetUpCustomers(context);
+            SetUpTask(context);
             context.SaveChanges();
             t.Commit();
         }
@@ -24,6 +25,20 @@ namespace TestCSMS.DB
                     23
                 );
             context.Customers.Add(Customers);
+        }
+
+        private static void SetUpTask(ApplicationDbContext context)
+        {
+            var task = new TaskModel(
+                    new Guid("DDE4BA55-808E-479F-BE8B-72F69913442F"),
+                    "task set up",
+                    "task set up contents",
+                    DateTime.Now.ToUniversalTime(),
+                    new Guid("DDE4BA55-808E-479F-BE8B-72F69913442F"),
+                    new Guid("DDE4BA55-808E-479F-BE8B-72F69913442F")
+                );
+
+            context.Task.Add(task);
         }
     }
 }

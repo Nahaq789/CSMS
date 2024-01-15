@@ -1,7 +1,7 @@
 ﻿using CSMS.Domain.DomainService;
+using CSMS.Domain.DomainService.Interface;
 using CSMS.Domain.Models;
-using CSMS.Infrastracture.Repository.Task;
-using MediatR;
+using CSMS.UseCase.Commands.TaskCommand;
 using Microsoft.Extensions.Logging;
 
 
@@ -9,33 +9,49 @@ namespace TestCSMS.Service.Task;
 
 public sealed class TestTaskApi : IClassFixture<TestDatabaseFixture>
 {
-    private readonly HttpClient _httpClient;
-    private readonly IMediator _mediatorMock;
-    private readonly ITaskRepository<TaskModel> _taskRepository;
-    private readonly ILogger<TaskService> _loggerMock;
+    private DateTime utcDateTime = DateTime.Now.ToUniversalTime();
+    private TestDatabaseFixture _databaseFixture = new TestDatabaseFixture();
+    private CancellationToken _token = new CancellationToken();
 
-    public TestTaskApi(HttpClient httpClient, IMediator mediatorMock, ITaskRepository<TaskModel> taskRepository, ILogger<TaskService> loggerMock)
+    public TestTaskApi()
     {
-        _httpClient = httpClient;
-        _mediatorMock = mediatorMock;
-        _taskRepository = taskRepository;
-        _loggerMock = loggerMock;
     }
 
     [Fact]
-    public async ValueTask GetAll()
+    public async void CreateTask()
     {
-        var response = await _httpClient.GetAsync("api/Task/");
+        var command = new CreateTaskCommand(
+                        Guid.NewGuid(),
+                        "taskaddtest",
+                        "this is task test",
+                        utcDateTime,
+                        Guid.Empty,
+                        Guid.Empty
+            );
 
-        var s = await response.Content.ReadAsStringAsync();
-        response.EnsureSuccessStatusCode();
+        var service = new TaskService(_databaseFixture.CreateContext());
 
-        Assert.True(response.IsSuccessStatusCode);
+        ILogger<CreateTaskCommandHandler> loggerMock = new Logger<CreateTaskCommandHandler>(new LoggerFactory());
+        var handler = new CreateTaskCommandHandler(service, loggerMock);
+
+        var result = await handler.Handle(command, _token);
+
+        Assert.NotNull(result);
+        Assert.IsType<TaskModel>(result);
     }
 
-    //[Fact]
-    //public async Task CreateTask()
-    //{
-    //    _mediatorMock.Send(Arg)
-    //}
+    [Fact]
+    public async void DeleteTask()
+    {
+        var command = new DeleteTaskCommand(new Guid("DDE4BA55-808E-479F-BE8B-72F69913442F"));
+
+        var service = new TaskService(_databaseFixture.CreateContext());
+        ILogger<DeleteTaskCommandHandler> loggerMock = new Logger<DeleteTaskCommandHandler>(new LoggerFactory());
+
+        var handler = new DeleteTaskCommandHandler(service, loggerMock);
+        var result = await handler.Handle(command, _token);
+
+        Assert.Equal(result, command.TaskId);
+        Assert.IsType<Guid>(result);
+    }
 }
