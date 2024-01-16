@@ -7,6 +7,6 @@ using System.Runtime.Serialization;
 namespace CSMS.UseCase.Commands.TaskCommand.Query;
 
 [DataContract]
-public record class GetTaskByIdQuery(Guid id) : IRequest<TaskModel>;
+public record class GetTaskByIdQuery(Guid id) : IRequest<TaskModel>, IQuery<TaskModel>;
 [DataContract]
-public record class GetTaskQuery : IRequest<IEnumerable<TaskModel>>;
+public record class GetTaskQuery : IRequest<IEnumerable<TaskModel>>, IQuery<IEnumerable<TaskModel>>;

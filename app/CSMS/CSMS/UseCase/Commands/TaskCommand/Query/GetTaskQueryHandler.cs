@@ -4,7 +4,7 @@ using CSMS.Infrastracture.Repository.Task;
 using MediatR;
 
 namespace CSMS.UseCase.Commands.TaskCommand.Query;
-public class GetTaskQueryHandler : IRequestHandler<GetTaskQuery, IEnumerable<TaskModel>>
+public class GetTaskQueryHandler : IQueryHandler<GetTaskQuery, IEnumerable<TaskModel>>
 {
     private readonly ITaskRepository<TaskModel> _taskRepository;
 

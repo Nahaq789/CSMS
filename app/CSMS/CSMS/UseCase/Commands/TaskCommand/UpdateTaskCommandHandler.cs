@@ -8,9 +8,9 @@ namespace CSMS.UseCase.Commands.TaskCommand
     public class UpdateTaskCommandHandler : IRequestHandler<UpdateTaskCommand, TaskModel>
     {
         private readonly ITaskService<TaskModel> _taskService;
-        private readonly ILogger<CreateTaskCommandHandler> _logger;
+        private readonly ILogger<UpdateTaskCommandHandler> _logger;
 
-        public UpdateTaskCommandHandler(ITaskService<TaskModel> taskService, ILogger<CreateTaskCommandHandler> logger)
+        public UpdateTaskCommandHandler(ITaskService<TaskModel> taskService, ILogger<UpdateTaskCommandHandler> logger)
         {
             _taskService = taskService;
             _logger = logger;

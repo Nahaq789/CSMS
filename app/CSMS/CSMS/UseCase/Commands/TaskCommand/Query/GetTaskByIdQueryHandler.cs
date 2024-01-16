@@ -5,7 +5,8 @@ using MediatR;
 
 namespace CSMS.UseCase.Commands.TaskCommand.Query;
 
-public class GetTaskByIdQueryHandler : IRequestHandler<GetTaskByIdQuery, TaskModel>
+public class GetTaskByIdQueryHandler : IQueryHandler<GetTaskByIdQuery, TaskModel>
+
 {
     private readonly ITaskRepository<TaskModel> _taskRepository;
 
@@ -17,6 +18,6 @@ public class GetTaskByIdQueryHandler : IRequestHandler<GetTaskByIdQuery, TaskMod
     public async Task<TaskModel> Handle(GetTaskByIdQuery query, CancellationToken cancellationToken)
     {
         var result = await _taskRepository.GetById(query.id);
-        return await Task.FromResult(result);
+        return result;
     }
 }
