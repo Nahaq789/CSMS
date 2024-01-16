@@ -53,30 +53,35 @@ interface EdirTollbarProps {
 function EditToolbar(props: EdirTollbarProps) {
   const { setRows, setRowModesModel } = props;
 
-  // const handleClick = () => {
-  // const id = rows.find;
-  // setRows((oldRows) => [...oldRows, { id, name: '', age: '', isNew: true }]);
-  // setRowModesModel((oldModel) => ({
-  //   ...oldModel,
-  //   [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-  // }));
+  const handleClick = () => {
+    const id = "550e8400-e29b-41d4-a716-446655440001";
+    setRows((oldRows) => [...oldRows, { id, name: "", age: "", isNew: true }]);
+    setRowModesModel((oldModel) => ({
+      ...oldModel,
+      [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
+    }));
+  };
 }
 
 const Task: React.FC<TaskProps> = (): React.JSX.Element => {
   const fetcher = async <T,>(url: string): Promise<T> =>
     await axios.get(url).then((res: AxiosResponse<T>) => res.data);
-  const { data, error } = useSWR<GridRowsProp<Task>>("/api/Task/", fetcher);
-  const [rows, setRows] = React.useState(data);
+  //const { data, error } = useSWR<GridRowsProp<Task>>("/api/Task/", fetcher);
+  const [task, setTask] = useState<GridRowsProp<Task>>();
+  const [rows, setRows] = React.useState(task);
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
     {}
   );
   const [getResult, setGetResult] = React.useState<Task>();
   const [text, setText] = useState<string>("");
+
   useEffect(() => {
-    if (data) {
-      setRows(data);
-    }
-  }, [data]);
+    axios.get("/api/Task/").then((res) => {
+      setTask(res.data);
+      setRows(task);
+    });
+  }, [task]);
+
   const handleRowEditStop: GridEventListener<"rowEditStop"> = (
     params,
     event
@@ -90,61 +95,22 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
 
-  const handleSaveClick = (params: Task) => () => {
-    const updateRow = {
-      Task: params,
-    };
-    console.log(params.TaskId);
+  // const handleSaveClick = (params: Task) => () => {
+  //   const updateRow = {
+  //     Task: params,
+  //   };
+  //   console.log(params.TaskId);
 
-    // axios
-    //   .put("/api/Task/", {
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     data: updateRow,
-    //   })
-    //   .then((res: AxiosResponse<Task>) => {
-    //     const dbRow: Task = res.data;
-    //     // setRows(
-    //     //   rows?.map((r: { id: string }) =>
-    //     //     r.id === updateRow.id ? { ...dbRow } : r
-    //     //   )
-    //     // );
-    //     console.log(dbRow);
-    //   });
+  //   setRowModesModel({
+  //     ...rowModesModel,
+  //     [params.TaskId]: { mode: GridRowModes.View, ignoreModifications: true },
+  //   });
+  //   console.log(rowModesModel);
+  // };
+  const handleSaveClick = (id: GridRowId) => async () => {
     setRowModesModel({
       ...rowModesModel,
-      ["550e8400-e29b-41d4-a716-446655440000"]: { mode: GridRowModes.View },
-    });
-    console.log(rowModesModel);
-  };
-
-  const handleDeleteClick = (id: GridRowId) => async () => {
-    await axios.get(`/api/Task/${id}`).then((res: AxiosResponse<Task>) => {
-      // setGetResult(res.data);
-      axios
-        .delete("/api/Task/", {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          data: res.data,
-        })
-        .then((res) => {
-          // setGetResult(res.data);
-          setRows(rows?.filter((row: Task) => row.TaskId != id));
-        })
-        .catch((error) => {
-          if (error.response) {
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-          } else if (error.request) {
-            console.log(error.request);
-          } else {
-            console.log("Error", error.message);
-          }
-          console.log(error.config);
-        });
+      [id]: { mode: GridRowModes.View, ignoreModifications: true },
     });
   };
 
@@ -156,6 +122,26 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
 
     const editedRow = rows?.find((row) => row.TaskId === id);
     setRows(rows?.filter((row) => row.TaskId !== id));
+  };
+
+  const handleDeleteClick = (id: GridRowId) => async () => {
+    await axios
+      .delete(`/api/Task/${id}`)
+      .then((res: AxiosResponse<Task>) => {
+        setRows(rows?.filter((row: Task) => row.TaskId != id));
+      })
+      .catch((error) => {
+        if (error.response) {
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          console.log("Error", error.message);
+        }
+        console.log(error.config);
+      });
   };
 
   const processRowUpdate = (newRow: GridRowModel<Task>) => {
@@ -218,7 +204,7 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
               sx={{
                 color: "primary.main",
               }}
-              onClick={handleSaveClick(params.row)}
+              onClick={handleSaveClick(params.id)}
               key={params.id}
             />,
             <GridActionsCellItem
@@ -297,7 +283,7 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
               }}
             >
               <DataGrid
-                rows={rows || []}
+                rows={task || []}
                 getRowId={(row) => row.taskId}
                 columns={columns}
                 editMode="row"
