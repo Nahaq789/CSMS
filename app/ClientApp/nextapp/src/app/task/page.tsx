@@ -23,6 +23,9 @@ import {
   GridActionsCellItem,
   GridRowProps,
   GridRowParams,
+  MuiEvent,
+  GridRowEditStopParams,
+  MuiBaseEvent,
 } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
@@ -87,8 +90,8 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
   }, [task]);
 
   const handleRowEditStop: GridEventListener<"rowEditStop"> = (
-    params,
-    event
+    params: GridRowEditStopParams,
+    event: MuiEvent<MuiBaseEvent>
   ) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
@@ -132,17 +135,20 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
       [id]: { mode: GridRowModes.View, ignoreModifications: true },
     });
 
-    const editedRow = rows?.find((row) => row.TaskId === id);
-    setRows(rows?.filter((row) => row.TaskId !== id));
+    const editedRow = rows?.find((row: Task) => row.TaskId === id);
+    setRows(rows?.filter((row: Task) => row.TaskId !== id));
   };
 
-  const processRowUpdate = (newRow: GridRowModel<Task>) => {
+  const processRowUpdate = (
+    newRow: GridRowModel<Task>,
+    oldRow: GridRowModel<Task>
+  ) => {
     const updateRow = {
       ...newRow,
       isNew: false,
     };
     setRows(
-      rows?.map((row) => (row.TaskId === newRow.TaskId ? updateRow : row))
+      rows?.map((row: Task) => (row.TaskId === newRow.TaskId ? updateRow : row))
     );
     return updateRow;
   };
@@ -290,8 +296,8 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
                 slotProps={{
                   toolbar: { setRows, setRowModesModel },
                 }}
-                processRowUpdate={(updateRow) => {
-                  processRowUpdate(updateRow);
+                processRowUpdate={(updateRow, oldRow) => {
+                  processRowUpdate(updateRow, oldRow);
                 }}
               />
             </Box>
