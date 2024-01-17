@@ -23,9 +23,6 @@ import {
   GridActionsCellItem,
   GridRowProps,
   GridRowParams,
-  MuiEvent,
-  GridRowEditStopParams,
-  MuiBaseEvent,
 } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
@@ -56,38 +53,42 @@ interface EdirTollbarProps {
 function EditToolbar(props: EdirTollbarProps) {
   const { setRows, setRowModesModel } = props;
 
-  const handleClick = () => {
-    const id = "550e8400-e29b-41d4-a716-446655440001";
-    setRows((oldRows) => [...oldRows, { id, name: "", age: "", isNew: true }]);
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
-    }));
-  };
+  // const handleClick = () => {
+  // const id = rows.find;
+  // setRows((oldRows) => [...oldRows, { id, name: '', age: '', isNew: true }]);
+  // setRowModesModel((oldModel) => ({
+  //   ...oldModel,
+  //   [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+  // }));
 }
 
 const Task: React.FC<TaskProps> = (): React.JSX.Element => {
   const fetcher = async <T,>(url: string): Promise<T> =>
     await axios.get(url).then((res: AxiosResponse<T>) => res.data);
-  //const { data, error } = useSWR<GridRowsProp<Task>>("/api/Task/", fetcher);
+  const { data, error } = useSWR<GridRowsProp<Task>>("/api/Task/", fetcher);
   const [task, setTask] = useState<GridRowsProp<Task>>();
-  const [rows, setRows] = React.useState(task);
+  const [rows, setRows] = React.useState(data);
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
     {}
   );
   const [getResult, setGetResult] = React.useState<Task>();
   const [text, setText] = useState<string>("");
+  useEffect(() => {
+    if (data) {
+      setRows(data);
+    }
+  }, [data]);
 
   useEffect(() => {
     axios.get("/api/Task/").then((res) => {
       setTask(res.data);
-      setRows(task);
+      setRows(res.data);
     });
   }, [task]);
 
   const handleRowEditStop: GridEventListener<"rowEditStop"> = (
-    params: GridRowEditStopParams,
-    event: MuiEvent<MuiBaseEvent>
+    params,
+    event
   ) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
@@ -98,33 +99,11 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
 
-  // const handleSaveClick = (params: Task) => () => {
-  //   const updateRow = {
-  //     Task: params,
-  //   };
-  //   console.log(params.TaskId);
-
-  //   setRowModesModel({
-  //     ...rowModesModel,
-  //     [params.TaskId]: { mode: GridRowModes.View, ignoreModifications: true },
-  //   });
-  //   console.log(rowModesModel);
-  // };
   const handleSaveClick = (id: GridRowId) => async () => {
     setRowModesModel({
       ...rowModesModel,
       [id]: { mode: GridRowModes.View, ignoreModifications: true },
     });
-  };
-
-  const handleCancelClick = (id: GridRowId) => () => {
-    setRowModesModel({
-      ...rowModesModel,
-      [id]: { mode: GridRowModes.View, ignoreModifications: true },
-    });
-
-    const editedRow = rows?.find((row: Task) => row.TaskId === id);
-    setRows(rows?.filter((row: Task) => row.TaskId !== id));
   };
 
   const handleDeleteClick = (id: GridRowId) => async () => {
@@ -147,16 +126,23 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
       });
   };
 
-  const processRowUpdate = (
-    newRow: GridRowModel<Task>,
-    oldRow: GridRowModel<Task>
-  ) => {
+  const handleCancelClick = (id: GridRowId) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [id]: { mode: GridRowModes.View, ignoreModifications: true },
+    });
+
+    const editedRow = rows?.find((row) => row.TaskId === id);
+    setRows(rows?.filter((row) => row.TaskId !== id));
+  };
+
+  const processRowUpdate = (newRow: GridRowModel<Task>) => {
     const updateRow = {
       ...newRow,
       isNew: false,
     };
     setRows(
-      rows?.map((row: Task) => (row.TaskId === newRow.TaskId ? updateRow : row))
+      rows?.map((row) => (row.TaskId === newRow.TaskId ? updateRow : row))
     );
     return updateRow;
   };
@@ -289,8 +275,8 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
               }}
             >
               <DataGrid
-                rows={task || []}
-                getRowId={(row) => row.TaskName + row.TaskId}
+                rows={rows || []}
+                getRowId={(row) => row.taskId}
                 columns={columns}
                 editMode="row"
                 rowModesModel={rowModesModel}
@@ -304,7 +290,9 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
                 slotProps={{
                   toolbar: { setRows, setRowModesModel },
                 }}
-                processRowUpdate={processRowUpdate}
+                processRowUpdate={(updateRow) => {
+                  processRowUpdate(updateRow);
+                }}
               />
             </Box>
           </Box>
