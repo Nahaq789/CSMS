@@ -54,34 +54,6 @@ public class TaskController : ControllerBase
         }
     }
 
-    //[HttpPost]
-    //[ProducesResponseType(StatusCodes.Status201Created)]
-    //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-    //public async Task<IActionResult> PostAsync([FromBody] TaskDto task)
-    //{
-    //    try
-    //    {
-    //        var _task = _mapper.Map<TaskModel>(task);
-    //        if (ModelState.IsValid)
-    //        {
-    //            //await _taskService.Add(_task);
-    //            return Ok(task);
-    //        }
-    //        else
-    //        {
-    //            {
-    //                return BadRequest("Failed to create task");
-    //            }
-    //        }
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        var result =
-    //            $"It was not possible to create a new task, please try later on ({ex.GetType().Name} - {ex.Message})";
-    //        return BadRequest(result);
-    //    }
-    //}
-
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -110,20 +82,17 @@ public class TaskController : ControllerBase
         }
     }
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Delete([FromBody] TaskDto task)
+    public async Task<IActionResult> Delete(Guid id)
     {
         try
         {
             if (ModelState.IsValid)
             {
-                var _taskDeleteCommand = _mapper.Map<Guid>(task);
+                var _taskDeleteCommand = _mapper.Map<DeleteTaskCommand>(id);
                 var result = await _mediator.Send(_taskDeleteCommand);
-                //return result != Guid.Empty
-                //    ? Ok(task)
-                //    : BadRequest("Failed to delete task");
 
                 return Ok(result);
             }
@@ -147,7 +116,7 @@ public class TaskController : ControllerBase
     public async Task<IActionResult> CreateTask([FromBody] TaskDto task)
     {
         try
-        Å@{
+        {
             if (ModelState.IsValid)
             {
                 var _taskCreateCommand = _mapper.Map<CreateTaskCommand>(task);
