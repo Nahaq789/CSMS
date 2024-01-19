@@ -32,6 +32,7 @@ import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import { useRouter } from "next/navigation";
+import { UpdateRounded } from "@mui/icons-material";
 
 interface Task {
   taskId: string;
@@ -146,9 +147,17 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
     setTask(task?.filter((row: Task) => row.taskId !== id));
   };
 
-  const processRowUpdate = (newRow: GridRowModel) => {
+  const processRowUpdate = async (newRow: GridRowModel) => {
     const updatedRow = { ...newRow } as Task;
     setTask(task?.map((row) => (row.taskId === newRow.id ? updatedRow : row)));
+
+    console.log(updatedRow);
+
+    await axios
+      .put("/api/Task/", updatedRow)
+      .then((res: AxiosResponse<Task>) => {
+        console.log(res.data);
+      });
 
     return updatedRow;
   };
