@@ -2,12 +2,11 @@
 
 import { AxiosResponse } from "axios";
 import axios from "../../api/apiConfig";
-import { promises } from "dns";
 import React, { useEffect, useState } from "react";
 import useSWR from "swr";
 import styles from "./task.module.css";
 import { Box, LinearProgress, rgbToHex } from "@mui/material";
-import { ContrastOutlined, Key } from "@mui/icons-material";
+import Link from "next/link";
 import { blue, blueGrey, green, grey, red } from "@mui/material/colors";
 import {
   DataGrid,
@@ -32,7 +31,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import { text } from "stream/consumers";
+import UpdateModal from "../../components/modal/task/taskModal";
+import { useRouter } from "next/navigation";
 
 interface Task {
   taskId: string;
@@ -77,6 +77,7 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
   );
   const [getResult, setGetResult] = React.useState<Task>();
   const [text, setText] = useState<string>("");
+  const router = useRouter();
   useEffect(() => {
     if (data) {
       setRows(data);
@@ -90,18 +91,20 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
     event: MuiEvent<MuiBaseEvent>
   ) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
-      event.defaultMuiPrevented = true;
+      event.defaultMuiPrevented = false;
     }
   };
 
   const handleEditClick = (id: GridRowId) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+    //setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+    const editUrl = `/task/${id}`;
+    router.push(editUrl);
   };
 
-  const handleSaveClick = (id: GridRowId) => async () => {
+  const handleSaveClick = (id: GridRowId) => () => {
     setRowModesModel({
       ...rowModesModel,
-      [id]: { mode: GridRowModes.View, ignoreModifications: true },
+      [id]: { mode: GridRowModes.View, ignoreModifications: false },
     });
   };
 
@@ -151,12 +154,20 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
     setRows(rows?.filter((row: Task) => row.taskId !== id));
   };
 
-  const processRowUpdate = (newR: any, oldR: any) => {
-    setTask((rows) =>
-      rows?.map((row) => (row.taskId === newR.id ? newR : row))
-    );
+  // const processRowUpdate = (newR: any, oldR: any) => {
+  //   setTask((rows) =>
+  //     rows?.map((row) => (row.taskId === newR.id ? newR : row))
+  //   );
 
-    return newR;
+  //   return newR;
+  // };
+  const processRowUpdate = (newRow: GridRowModel) => {
+    const updatedRow = { ...newRow } as Task;
+    setTask(rows?.map((row) => (row.taskId === newRow.id ? updatedRow : row)));
+    //setTask(rows);
+
+    console.log("unko");
+    return updatedRow;
   };
 
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
@@ -170,11 +181,13 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
       headerName: "Name",
       flex: 1,
       cellClassName: "name-column--cell",
+      editable: true,
     },
     {
       field: "contents",
       headerName: "Content",
       flex: 1,
+      editable: true,
     },
     {
       field: "customerId",
@@ -287,18 +300,21 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
                 getRowId={(row) => row.taskId}
                 columns={columns}
                 editMode="row"
+                processRowUpdate={(updatedRow, originalRow) =>
+                  processRowUpdate(updatedRow)
+                }
+                onProcessRowUpdateError={(error) => console.log(error)}
                 rowModesModel={rowModesModel}
                 onRowModesModelChange={handleRowModesModelChange}
                 onRowEditStop={handleRowEditStop}
                 slots={{
                   toolbar: GridToolbar,
                 }}
-                onRowClick={console.log}
+                //onRowClick={console.log}
                 disableRowSelectionOnClick
                 slotProps={{
                   toolbar: { setRows, setRowModesModel },
                 }}
-                processRowUpdate={processRowUpdate}
               />
             </Box>
           </Box>
