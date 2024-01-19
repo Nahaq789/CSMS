@@ -79,15 +79,9 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
   useEffect(() => {
     if (data) {
       setRows(data);
+      setTask(data);
     }
   }, [data]);
-
-  useEffect(() => {
-    axios.get("/api/Task/").then((res) => {
-      setTask(res.data);
-      setRows(res.data);
-    });
-  }, [task]);
 
   const handleRowEditStop: GridEventListener<"rowEditStop"> = (
     params: GridRowEditStopParams,
@@ -109,11 +103,20 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
     });
   };
 
+  const handleTaskGetAll = () => {
+    axios.get("/api/Task/").then((res) => {
+      setTask(res.data);
+      setRows(res.data);
+    });
+  };
+
   const handleDeleteClick = (id: GridRowId) => async () => {
     await axios
       .delete(`/api/Task/${id}`)
       .then((res: AxiosResponse<Task>) => {
-        setRows(rows?.filter((row: Task) => row.TaskId != id));
+        // setRows(rows?.filter((row: Task) => row.TaskId != id));
+        // setTask(rows);
+        handleTaskGetAll();
       })
       .catch((error) => {
         if (error.response) {
@@ -128,6 +131,13 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
         console.log(error.config);
       });
   };
+
+  // useEffect(() => {
+  //   axios.get("/api/Task/").then((res) => {
+  //     setTask(res.data);
+  //     setRows(res.data);
+  //   });
+  // }, []);
 
   const handleCancelClick = (id: GridRowId) => () => {
     setRowModesModel({
@@ -281,7 +291,7 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
               }}
             >
               <DataGrid
-                rows={rows || []}
+                rows={task || []}
                 getRowId={(row) => row.taskId}
                 columns={columns}
                 editMode="row"
