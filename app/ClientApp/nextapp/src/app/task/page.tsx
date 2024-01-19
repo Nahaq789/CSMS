@@ -31,7 +31,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
-import UpdateModal from "../../components/modal/task/taskModal";
 import { useRouter } from "next/navigation";
 
 interface Task {
@@ -71,7 +70,7 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
     await axios.get(url).then((res: AxiosResponse<T>) => res.data);
   const { data, error } = useSWR<GridRowsProp<Task>>("/api/Task/", fetcher);
   const [task, setTask] = useState<GridRowsProp<Task>>();
-  const [rows, setRows] = React.useState(data);
+  //const [rows, setRows] = React.useState(data);
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
     {}
   );
@@ -80,7 +79,7 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
   const router = useRouter();
   useEffect(() => {
     if (data) {
-      setRows(data);
+      //setRows(data);
       setTask(data);
       console.log(data);
     }
@@ -111,7 +110,7 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
   const handleTaskGetAll = () => {
     axios.get("/api/Task/").then((res) => {
       setTask(res.data);
-      setRows(res.data);
+      //setRows(res.data);
     });
   };
 
@@ -137,36 +136,20 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
       });
   };
 
-  // useEffect(() => {
-  //   axios.get("/api/Task/").then((res) => {
-  //     setTask(res.data);
-  //     setRows(res.data);
-  //   });
-  // }, []);
-
   const handleCancelClick = (id: GridRowId) => () => {
     setRowModesModel({
       ...rowModesModel,
       [id]: { mode: GridRowModes.View, ignoreModifications: true },
     });
 
-    const editedRow = rows?.find((row: Task) => row.taskId === id);
-    setRows(rows?.filter((row: Task) => row.taskId !== id));
+    const editedRow = task?.find((row: Task) => row.taskId === id);
+    setTask(task?.filter((row: Task) => row.taskId !== id));
   };
 
-  // const processRowUpdate = (newR: any, oldR: any) => {
-  //   setTask((rows) =>
-  //     rows?.map((row) => (row.taskId === newR.id ? newR : row))
-  //   );
-
-  //   return newR;
-  // };
   const processRowUpdate = (newRow: GridRowModel) => {
     const updatedRow = { ...newRow } as Task;
-    setTask(rows?.map((row) => (row.taskId === newRow.id ? updatedRow : row)));
-    //setTask(rows);
+    setTask(task?.map((row) => (row.taskId === newRow.id ? updatedRow : row)));
 
-    console.log("unko");
     return updatedRow;
   };
 
@@ -313,7 +296,7 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
                 //onRowClick={console.log}
                 disableRowSelectionOnClick
                 slotProps={{
-                  toolbar: { setRows, setRowModesModel },
+                  toolbar: { setTask, setRowModesModel },
                 }}
               />
             </Box>
