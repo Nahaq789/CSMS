@@ -26,6 +26,7 @@ import {
   GridRowEditStopParams,
   MuiBaseEvent,
   GridRowMode,
+  GridValueGetterParams,
 } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
@@ -41,6 +42,7 @@ interface Task {
   deadline: Date;
   customerId: string;
   contractId: string;
+  taskStatusId: number;
 }
 
 interface TaskProps {
@@ -97,8 +99,8 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
 
   const handleEditClick = (id: GridRowId) => () => {
     //setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
-    const editUrl = `/task/${id}`;
-    router.push(editUrl);
+    const editUrl = `/task/id=${id}`;
+    router.push(editUrl, { query: { id: id } });
   };
 
   const handleSaveClick = (id: GridRowId) => () => {
@@ -182,14 +184,16 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
       editable: true,
     },
     {
-      field: "customerId",
-      headerName: "CustomerID",
+      field: "deadline",
+      headerName: "Dead Line",
       flex: 1,
-    },
-    {
-      field: "contractId",
-      headerName: "ContractID",
-      flex: 1,
+      editable: true,
+      type: "dateTime",
+      valueGetter: (params: GridValueGetterParams) => {
+        const deadlineString = params.row.deadline as string;
+        const deadlineDate = new Date(deadlineString);
+        return deadlineDate;
+      },
     },
     {
       field: "actions",

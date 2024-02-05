@@ -24,7 +24,8 @@ namespace CSMS.UseCase.Commands.TaskCommand
                     message.Contents,
                     message.Deadline,
                     message.CustomerId,
-                    message.ContractId
+                    message.ContractId,
+                    message.TaskStatusId
                 );
 
             var requestUpdateTask = new IdentifiedCommand<UpdateTaskCommand>(message);

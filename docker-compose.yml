@@ -17,19 +17,6 @@ services:
     extra_hosts:
         - "host.docker.internal:host-gateway"
 
-  # testdb:
-  #   container_name: testdb
-  #   image: postgres
-  #   volumes: 
-  #       # - ./docker/pg:/var/lib/postgresql/data
-  #       - db-data:/var/lib/postgresql/data
-  #   environment:
-  #       POSTGRES_USER: postgres
-  #       POSTGRES_PASSWORD: postgres
-  #       POSTGRES_DB: TestCustomerMS
-  #       PGDATA: /var/lib/postgresql/data/pgdata2
-  #   ports:
-  #     - '5431:5431'
   pgadmin:
     image: dpage/pgadmin4
     restart: always
@@ -39,18 +26,6 @@ services:
       TZ: Asia/Tokyo
       PGADMIN_DEFAULT_EMAIL: 'naha022677@icloud.com'
       PGADMIN_DEFAULT_PASSWORD: 'postgres'
-      
-  # nodejs:
-  #   container_name: nodejs
-  #   node:
-  #    build:
-  #      context: ../app/React/docker/nodejs
-  #      dockerfile: Dockerfile
-  #    volumes:
-  #     - ./:/usr/src/app
-  #    command: sh -c "cd reacrpage && yarn start"
-  #    ports:
-  #     - "3000:3000"
 
 volumes:
   db-data:

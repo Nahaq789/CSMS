@@ -43,5 +43,11 @@ public class UpdateTaskCommandProfile : Profile
                 opt =>
                 {
                     opt.MapFrom(src => src.ContractId);
-                });
+                })
+            .ForMember(
+                        dest => dest.TaskStatusId,
+                        opt =>
+                        {
+                opt.MapFrom(src => src.TaskStatusId);
+    });
 }

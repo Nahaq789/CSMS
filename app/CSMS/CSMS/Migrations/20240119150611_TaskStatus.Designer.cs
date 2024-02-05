@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CSMS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240119150611_TaskStatus")]
+    partial class TaskStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -112,12 +115,7 @@ namespace CSMS.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
 
-                    b.Property<long>("TaskStatusId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("TaskId");
-
-                    b.HasIndex("TaskStatusId");
 
                     b.ToTable("Task", (string)null);
                 });
@@ -163,23 +161,6 @@ namespace CSMS.Migrations
 
                     b.Navigation("TaxRate")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("CSMS.Domain.Models.TaskModel", b =>
-                {
-                    b.HasOne("CSMS.Domain.Models.Master.TaskStatusModel", "_TaskStatusModel")
-                        .WithMany("_Tasks")
-                        .HasForeignKey("TaskStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("TaskStatus_fkey");
-
-                    b.Navigation("_TaskStatusModel");
-                });
-
-            modelBuilder.Entity("CSMS.Domain.Models.Master.TaskStatusModel", b =>
-                {
-                    b.Navigation("_Tasks");
                 });
 #pragma warning restore 612, 618
         }

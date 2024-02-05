@@ -25,8 +25,10 @@ namespace CSMS.UseCase.Commands.TaskCommand
                     message.TaskName,
                     message.Contents,
                     message.Deadline,
+                    //TimeZoneInfo.ConvertTimeFromUtc(message.Deadline, TimeZoneInfo.FindSystemTimeZoneById("Asia/Tokyo")),
                     message.CustomerId,
-                    message.ContractId
+                    message.ContractId,
+                    message.TastStatusId
                 );
 
             var requestCreateTask = new IdentifiedCommand<CreateTaskCommand>(message);

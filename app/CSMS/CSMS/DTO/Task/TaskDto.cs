@@ -13,9 +13,10 @@ public class TaskDto
     public DateTime Deadline { get; private set; }
     public Guid CustomerId { get; private set; }
     public Guid ContractId { get; private set; }
+    public long TaskStatusId { get; private set; }
 
     [JsonConstructor]
-    public TaskDto(Guid taskId, string taskName, string contents, DateTime deadline, Guid customerId, Guid contractId)
+    public TaskDto(Guid taskId, string taskName, string contents, DateTime deadline, Guid customerId, Guid contractId, long taskStatusId)
     {
         TaskId = taskId;
         TaskName = taskName;
@@ -23,5 +24,6 @@ public class TaskDto
         Deadline = deadline;
         CustomerId = customerId;
         ContractId = contractId;
+        TaskStatusId = taskStatusId;
     }
 }

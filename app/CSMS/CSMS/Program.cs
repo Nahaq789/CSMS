@@ -12,12 +12,16 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection.Metadata;
 using CSMS.UseCase.Behavior;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 var AllowSpecificOrigins = "_AllowSpecificOrigins";
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -39,6 +43,7 @@ builder.Services.AddCors(options =>
 StartupDI.Setup(builder);
 
 var app = builder.Build();
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())

@@ -22,9 +22,13 @@ public class CreateTaskCommand : IRequest<TaskModel>
     [DataMember]
     public Guid ContractId { get; private set; }
     [DataMember]
+    public long TastStatusId { get; private set; }
+    [DataMember]
     public IEnumerable<TaskDto> Tasks => _tasks;
 
-    public CreateTaskCommand(Guid taskId, string taskName, string contents, DateTime deadline, Guid customerId, Guid contractId)
+    public CreateTaskCommand() { }
+
+    public CreateTaskCommand(Guid taskId, string taskName, string contents, DateTime deadline, Guid customerId, Guid contractId, long tastStatusId)
     {
         TaskId = taskId;
         TaskName = taskName;
@@ -32,6 +36,7 @@ public class CreateTaskCommand : IRequest<TaskModel>
         Deadline = deadline;
         CustomerId = customerId;
         ContractId = contractId;
+        TastStatusId = tastStatusId;
     }
 }
 

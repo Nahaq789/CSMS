@@ -57,6 +57,7 @@ public class TaskRepository : ITaskRepository<TaskModel>
         try
         {
             var result = await _context.Task.ToListAsync();
+            var a = await _context.Task.Include(t => t._TaskStatusModel).ToListAsync();
             if (result == null) { throw new Exception(); }
             return result;
         }

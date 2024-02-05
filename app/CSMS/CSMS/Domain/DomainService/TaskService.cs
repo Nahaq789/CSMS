@@ -119,7 +119,8 @@ public class TaskService : IBaseEntityID, ITaskService<TaskModel>
                 task.Contents,
                 task.Deadline,
                 task.CustomerId,
-                task.ContractId
+                task.ContractId,
+                task.TaskStatusId
             );
 
             _context.Task.Entry(target).State = EntityState.Detached;

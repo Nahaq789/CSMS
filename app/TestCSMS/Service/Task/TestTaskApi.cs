@@ -28,7 +28,8 @@ public sealed class TestTaskApi : IClassFixture<TestDatabaseFixture>
                         "this is task test",
                         utcDateTime,
                         Guid.Empty,
-                        Guid.Empty
+                        Guid.Empty,
+                        1
             );
 
         var service = new TaskService(_databaseFixture.CreateContext());
@@ -66,7 +67,8 @@ public sealed class TestTaskApi : IClassFixture<TestDatabaseFixture>
                         "this is task update test",
                         utcDateTime,
                         Guid.NewGuid(),
-                        Guid.NewGuid()
+                        Guid.NewGuid(),
+                        1
             );
         var service = new TaskService(_databaseFixture.CreateContext());
         ILogger<UpdateTaskCommandHandler> loggerMock = new Logger<UpdateTaskCommandHandler>(new LoggerFactory());

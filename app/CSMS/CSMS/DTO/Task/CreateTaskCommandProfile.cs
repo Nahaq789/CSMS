@@ -43,5 +43,11 @@ public class CreateTaskCommandProfile : Profile
                 opt =>
                 {
                     opt.MapFrom(src => src.ContractId);
+                })
+            .ForMember(
+                dest => dest.TastStatusId,
+                opt =>
+                {
+                    opt.MapFrom(src => src.TaskStatusId);
                 });
 }

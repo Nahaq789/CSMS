@@ -35,7 +35,8 @@ namespace TestCSMS.DB
                     "task set up contents",
                     DateTime.Now.ToUniversalTime(),
                     new Guid("DDE4BA55-808E-479F-BE8B-72F69913442F"),
-                    new Guid("DDE4BA55-808E-479F-BE8B-72F69913442F")
+                    new Guid("DDE4BA55-808E-479F-BE8B-72F69913442F"),
+                    1
                 );
 
             context.Task.Add(task);
