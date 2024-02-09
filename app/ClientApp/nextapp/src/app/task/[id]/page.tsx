@@ -1,8 +1,8 @@
 "use client";
 
 import { Box, TextField } from "@mui/material";
-import axios from "axios";
-import { useSearchParams } from "next/navigation";
+import axios from "../../../api/apiConfig";
+import { useParams, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -38,12 +38,10 @@ const TextFieldStyle = {
   },
 };
 const TaskPage: React.FC = () => {
-  const match = location.pathname;
-  console.log(match);
-  const param = useSearchParams();
-  const id = param.get("id");
-  // const router = useRouter();
-  // const id = router;
+  const currentUrl: string = window.location.href;
+  const idIndex = currentUrl.indexOf("id=") + 3;
+  const id = currentUrl.slice(idIndex);
+  console.log(id);
   const [task, setTask] = useState<Task>();
 
   useEffect(() => {
