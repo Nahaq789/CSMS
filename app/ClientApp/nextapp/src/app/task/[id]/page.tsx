@@ -5,6 +5,7 @@ import axios from "../../../api/apiConfig";
 import { useParams, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import {AxiosResponse} from "axios";
 
 interface Task {
   taskId: string;
@@ -38,21 +39,26 @@ const TextFieldStyle = {
   },
 };
 const TaskPage: React.FC = () => {
-  const currentUrl: string = window.location.href;
-  const idIndex = currentUrl.indexOf("id=") + 3;
-  const id = currentUrl.slice(idIndex);
-  console.log(id);
-  const [task, setTask] = useState<Task>();
+  
 
-  useEffect(() => {
-    const result = async () => {
-      await axios.get(`/api/Task/${id}`).then((res) => {
+  const [task, setTask] = useState<Task>();
+  
+  const [taskName, setTaskName] = useState<string>("");
+
+  useEffect((): void => {
+    const result = async (): Promise<void> => {
+      const currentUrl: string = window.location.href;
+      const idIndex = currentUrl.indexOf("id=") + 3;
+      const id = currentUrl.slice(idIndex);
+      await axios.get(`/api/Task/${id}`).then((res: AxiosResponse<any, any>): void => {
         setTask(res.data);
+        setTaskName(res.data.taskName);
         console.log(res.data);
       });
     };
     result();
   }, []);
+  
   return (
     <Box
       sx={{
@@ -110,6 +116,8 @@ const TaskPage: React.FC = () => {
                 defaultValue=""
                 variant="standard"
                 sx={TextFieldStyle}
+                onChange={(e) => setTaskName(e.target.value)}
+                value={taskName}
               />
             </Box>
           </Box>
