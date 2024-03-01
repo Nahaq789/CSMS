@@ -5,7 +5,7 @@ import axios from "../../../api/apiConfig";
 import { useParams, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import {AxiosResponse} from "axios";
+import { AxiosResponse } from "axios";
 
 interface Task {
   taskId: string;
@@ -17,8 +17,9 @@ interface Task {
   taskStatusId: number;
 }
 const TextFieldStyle = {
+  width: "100%",
   "& .MuiInputBase-input": {
-    color: "#000000", // 入力文字の色
+    color: "#AAAAAA", // 入力文字の色
   },
   "& label": {
     color: "#AAAAAA", // 通常時のラベル色
@@ -39,26 +40,30 @@ const TextFieldStyle = {
   },
 };
 const TaskPage: React.FC = () => {
-  
-
   const [task, setTask] = useState<Task>();
-  
+
   const [taskName, setTaskName] = useState<string>("");
+  const [taskId, setTaskId] = useState<string>("");
+  const [content, setContent] = useState<string>("");
 
   useEffect((): void => {
     const result = async (): Promise<void> => {
       const currentUrl: string = window.location.href;
       const idIndex = currentUrl.indexOf("id=") + 3;
       const id = currentUrl.slice(idIndex);
-      await axios.get(`/api/Task/${id}`).then((res: AxiosResponse<any, any>): void => {
-        setTask(res.data);
-        setTaskName(res.data.taskName);
-        console.log(res.data);
-      });
+      await axios
+        .get(`/api/Task/${id}`)
+        .then((res: AxiosResponse<any, any>): void => {
+          setTask(res.data);
+          setTaskName(res.data.taskName);
+          setTaskId(res.data.taskId);
+          setContent(res.data.contents);
+          console.log(res.data);
+        });
     };
     result();
   }, []);
-  
+
   return (
     <Box
       sx={{
@@ -108,6 +113,35 @@ const TaskPage: React.FC = () => {
                 defaultValue=""
                 variant="standard"
                 sx={TextFieldStyle}
+                value={taskId}
+              />
+              <TextField
+                required
+                id="taskname"
+                label="Task Name"
+                defaultValue=""
+                variant="standard"
+                sx={TextFieldStyle}
+                onChange={(e) => setTaskName(e.target.value)}
+                value={taskName}
+              />
+            </Box>
+            <Box
+              sx={{
+                gap: "20px",
+                paddingTop: "20px",
+                display: "flex",
+              }}
+            >
+              <TextField
+                required
+                id="content"
+                label="Content"
+                defaultValue=""
+                variant="standard"
+                sx={TextFieldStyle}
+                onChange={(e) => setContent(e.target.value)}
+                value={content}
               />
               <TextField
                 required
