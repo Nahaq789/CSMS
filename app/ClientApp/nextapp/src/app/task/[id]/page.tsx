@@ -2,17 +2,20 @@
 
 import {Box, TextField} from "@mui/material";
 import axios from "../../../api/apiConfig";
-import {useParams, useSearchParams} from "next/navigation";
-import {useRouter} from "next/navigation";
 import React, {useEffect, useState} from "react";
 import {AxiosResponse} from "axios";
-import Undici from "undici-types";
+import DateField from "../../../components/datePicker/datePicker";
+import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import {DatePicker} from "@mui/x-date-pickers/DatePicker";
+import {DateTimePicker} from "@mui/x-date-pickers";
+import {DemoContainer} from "@mui/x-date-pickers/internals/demo";
 
 interface Task {
     taskId: string;
     taskName: string;
     contents: string;
-    deadline: Date | undefined;
+    deadline: Date | null;
     customerId: string;
     contractId: string;
     taskStatusId: number;
@@ -47,7 +50,7 @@ const TaskPage: React.FC = () => {
     const [taskName, setTaskName] = useState<string>("");
     const [taskId, setTaskId] = useState<string>("");
     const [content, setContent] = useState<string>("");
-    const [deadline, setDeadline] = useState<Date>();
+    const [deadline, setDeadline] = useState<Date | null>(null);
 
     useEffect((): void => {
         const result = async (): Promise<void> => {
@@ -68,13 +71,20 @@ const TaskPage: React.FC = () => {
         result();
     }, []);
 
+    const handleDateChange = (date: Date | null): void => {
+        if (date) {
+            setDeadline(date);
+            console.log(date);
+        }
+    }
+
     const handleUpdateAsync = async (): Promise<void> => {
         const UpdateTaskModel: Task = {
             taskId: taskId,
             contents: content,
             contractId: taskId,
             customerId: taskId,
-            deadline: task?.deadline,
+            deadline: deadline,
             taskName: taskName,
             taskStatusId: 1,
         }
@@ -172,25 +182,26 @@ const TaskPage: React.FC = () => {
                                 value={taskName}
                             />
                         </Box>
-                        {/*<Box*/}
-                        {/*    sx={{*/}
-                        {/*        gap: "20px",*/}
-                        {/*        paddingTop: "20px",*/}
-                        {/*        display: "flex",*/}
-                        {/*    }}*/}
-                        {/*>*/}
-                        {/*    <TextField*/}
-                        {/*        required*/}
-                        {/*        id="deadline"*/}
-                        {/*        label="Dead Line"*/}
-                        {/*        sx={TextFieldStyle}*/}
-                        {/*        defaultValue=""*/}
-                        {/*        variant="standard"*/}
-                        {/*        onChange={(e) => setTaskName(e.target.value)}*/}
-                        {/*        value={deadline}*/}
-                        {/*        type={"date"}*/}
-                        {/*    />*/}
-                        {/*</Box>*/}
+                        <Box
+                            sx={{
+                                gap: "20px",
+                                paddingTop: "20px",
+                                display: "flex",
+                                width: "50%"
+                            }}
+                        >
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DemoContainer components={['DatePicker']}>
+                                    <DatePicker
+                                        label="Small picker"
+                                        slotProps={{textField: {size: 'small'}}}
+                                        sx={TextFieldStyle}
+                                        value={deadline}
+                                        onChange={handleDateChange}
+                                    />
+                                </DemoContainer>
+                            </LocalizationProvider>
+                        </Box>
                     </Box>
                 </Box>
             </Box>
