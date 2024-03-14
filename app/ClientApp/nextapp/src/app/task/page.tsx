@@ -35,6 +35,7 @@ import CancelIcon from "@mui/icons-material/Close";
 import {useRouter} from "next/navigation";
 import {UpdateRounded} from "@mui/icons-material";
 import TaskIcon from "@mui/icons-material/Task";
+import {AppRouterInstance} from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 interface Task {
     taskId: string;
@@ -80,7 +81,7 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
     );
     const [getResult, setGetResult] = React.useState<Task>();
     const [text, setText] = useState<string>("");
-    const router = useRouter();
+    const router: AppRouterInstance = useRouter();
     useEffect(() => {
         if (data) {
             //setRows(data);
@@ -101,7 +102,8 @@ const Task: React.FC<TaskProps> = (): React.JSX.Element => {
     const handleEditClick = (id: GridRowId) => () => {
         //setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
         const editUrl = `/task/id=${id}`;
-        router.push(editUrl, {query: {id: id}});
+        // router.push(editUrl, {query: {id: id}});
+        
     };
 
     const handleSaveClick = (id: GridRowId) => () => {
